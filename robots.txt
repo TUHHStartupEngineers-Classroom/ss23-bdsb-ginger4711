@@ -1,1 +1,1 @@
-Sitemap: https://github.com/TUHHStartupEngineers/quarto_journal_template/sitemap.xml
+Sitemap: https://github.com/TUHHStartupEngineers/ss23-bdsb-ginger4711/sitemap.xml
