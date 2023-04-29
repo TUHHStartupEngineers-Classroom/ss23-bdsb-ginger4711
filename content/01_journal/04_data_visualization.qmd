@@ -1,8 +1,4 @@
 ---
 title: "Data Visualization"
-author: "Joschka Schwarz"
+author: "Christian Sühl"
 ---
-
-::: callout-note
-You can delete everything in here and start fresh.
-:::
