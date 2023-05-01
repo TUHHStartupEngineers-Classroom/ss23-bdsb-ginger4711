@@ -103,3 +103,23 @@ print(patent_activity_dt[type == 2][1]) # Filter by US Company or Corporation an
 print("List the top 10 companies with the most new granted patents for August 2014.")
 print(patent_activity_dt[1:10]) # Take the first 10 elements of the ordered list.
 ```
+# Innovation In Tech
+Similarly I performed a few steps (some similar to patent dominance and recent patent activity) to find the top mainclasses:
+```{r}
+# For most innovative tech sensor group and sum the uspc_tbl by mainclass_id.
+most_innovative_tech_sectors <- as.data.table(uspc_tbl)[,.(patents = .N),by = mainclass_id] %>%
+                                            .[order(-patents),patents,mainclass_id] # Then order the list by descending patents.
+# Retrieve the assignee_ids of the 10 companies that have the most patents and only keep the assignee_ids of those.
+top_USPTO_main_classes <- as.data.table(patent_assignee_tbl)[,.(patents = .N),by = assignee_id][1:10][,assignee_id]
+# Search through the patent_assignee_tbl again and only keep those patents that come from one of those 10 companies.
+top_USPTO_main_classes <- as.data.table(patent_assignee_tbl)[assignee_id %in% top_USPTO_main_classes]
+# With the list of patents combine it by the patent_id with the uspc_tbl.
+top_USPTO_main_classes <- as.data.table(merge(as_tibble(top_USPTO_main_classes),uspc_tbl,by="patent_id")) %>%
+                                        .[,.(patents = .N),by = mainclass_id] %>% # Group and sum up by mainclass_id.
+                                        .[order(-patents),patents,mainclass_id] # Then order the list by descending patents.
+
+print("What is the most innovative tech sector?")
+print(most_innovative_tech_sectors[1]) # Take the first element of the ordered list.
+print("For the top 10 companies (worldwide) with the most patents, what are the top 5 USPTO tech main classes?")
+print(top_USPTO_main_classes[1:10]) # Take the first 10 elements of the ordered list.
+```
