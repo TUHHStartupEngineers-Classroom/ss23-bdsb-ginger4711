@@ -1,5 +1,9 @@
+library(tidyverse)
+library(data.table)
+library(dplyr)
 library(vroom)
 
+## Data Loading ##
 # Using the reduced data set
 
 # loading patent.tsv file
@@ -27,6 +31,7 @@ assignee_tbl <- vroom(
   col_types  = col_types_assignee,
   na         = c("", "NA", "NULL")
 )
+assignee_tbl <- rename(assignee_tbl,assignee_id = id) # Rename id to assignee_id to make merging easier
 
 # loading patent_assignee.tsv file
 col_types_patent_assignee <- list(
@@ -53,4 +58,11 @@ uspc_tbl <- vroom(
   na         = c("", "NA", "NULL")
 )
 
+## Patent Dominance ##
 
+# Convert patent_assignee_tbl to data.frame
+patent_dominance_dt <- as.data.table(patent_assignee_tbl)
+# Group by assignee_id and create sum "patents" over those with same assignee_id. Order by patents to take the first 10 elements.
+patent_dominance_dt <- patent_dominance_dt[,.(patents = .N),by = assignee_id][order(-patents),head(.SD, 10)]
+# Merge with assignee_tbl by assignee_id, then order by descending patents again and only keep patents and organization column and then print.
+patent_dominance_dt <- as.data.table(merge(as.tibble(patent_dominance_dt),assignee_tbl,by="assignee_id"))[order(-patents),patents,organization] %>% print()
