@@ -70,6 +70,10 @@ uspc_tbl <- vroom(
   na         = c("", "NA", "NULL")
 )
 ```
+# Visualization
+| To better understand the interactions and combinations of the different tables I constructed a little visualization.
+![Tables connections visualization](../../src/tbls_connections_visualization.png)
+
 # Patent Dominance
 For the patent dominance task I performed the following steps:
 ```{r}
