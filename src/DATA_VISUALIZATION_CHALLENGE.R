@@ -1,11 +1,3 @@
----
-title: "Data Visualization"
-author: "Christian Sühl"
----
-
-# Challenge 1
-I created a graph with multiple locations from the beginning of 2020 up until now.
-```{r}
 library(data.table)
 library(tidyverse) # loads ggplot2
 library(lubridate)
@@ -32,7 +24,7 @@ last_date_europe <- covid_data_dt[location == "Europe"][order(-date)][1]$date
 last_date_USA <- covid_data_dt[location == "United States"][order(-date)][1]$date
 
 addMillions <- function(x, ...) #<== function will add " %" to any number, and allows for any additional formatting through "format".
-    format(paste0(x/(1e+06), " M"), ...)
+  format(paste0(x/(1e+06), " M"), ...)
 
 covid_data_dt %>% ggplot(aes(x=date,y=total_cases),palette="Dark2") + # plot total_cases over time
   geom_line(aes(colour=location)) + # each location gets its own line
@@ -46,21 +38,20 @@ covid_data_dt %>% ggplot(aes(x=date,y=total_cases),palette="Dark2") + # plot tot
         colour="Continent / Country") + # Set location/country legend title.
   theme(axis.title.x=element_blank(), # Remove x axis label 
         text = element_text(size=10)) + # Increase text size
-
+  
   geom_label( # Display geom_label for europe and united states last data point
     data=covid_data_dt %>% filter((location == "Europe" & date == last_date_europe) | (location == "United States" & date == last_date_USA)),
     aes(label=total_cases),hjust=1,vjust=0.4
   )
-```
+
 # Challenge 2
-I created a world map with a blue color scale showing the relative fatality rate.
-```{r}
+
 # Get Case-Fatality rate (deaths/cases)
 covid_data_graph_tbl <- covid_data_tbl %>% # Read the covid data.
   filter(!is.na(total_cases) & !is.na(total_deaths) & !is.na(total_deaths_per_million)) %>% # Remove those dates where the total_cases number is not a number.
   group_by(location) %>% summarise(total_cases = sum(total_cases),total_deaths = sum(total_deaths),total_deaths_per_million = sum(total_deaths_per_million)) %>% # Group by location (country) and sum up total_cases and total_deaths over all dates.
   mutate(fatality_rate = (total_deaths/total_cases)) %>% # Add fatality_rate column to the tibble.
-                                                         # Can be exchanged for total_deaths_per_million to visualize mortality rate.
+  # Can be exchanged for total_deaths_per_million to visualize mortality rate.
   select(fatality_rate,location) %>%  # Only maintain fatality_rate and location
   mutate(location = case_when( # Replace non matching location names
     
@@ -73,7 +64,7 @@ covid_data_graph_tbl <- covid_data_tbl %>% # Read the covid data.
   distinct()
 
 total_deaths_worldwide <- covid_data_tbl %>% filter(!is.na(total_deaths)) %>% group_by(location) %>% filter(row_number()==n()) %>% summarise(total_deaths) %>%
-                                        ungroup() %>% summarise(total_deaths = sum(total_deaths))
+  ungroup() %>% summarise(total_deaths = sum(total_deaths))
 
 library(RColorBrewer)
 library(maptools)
@@ -95,5 +86,4 @@ ggplot(covid_data_graph_tbl) +
         axis.ticks = element_blank(), # Remove axis ticks.
         axis.text.x = element_blank(), # Remove x axis texts.
         axis.text.y = element_blank(), # Remove y axis texts.
-        )
-```
+  )
