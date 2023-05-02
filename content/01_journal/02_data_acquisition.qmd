@@ -3,6 +3,116 @@ title: "Data Acquisition"
 author: "Christian Sühl"
 ---
 
+
+# Database
+Trying out a connection to a database containing music information using RSQLite.
+```{r}
+#| include: false
+library(RSQLite)
+library(DBI)
+library(dplyr)
+```
+
+```{r}
+con <- RSQLite::dbConnect(drv    = SQLite(), 
+                          dbname = "../../src/Chinook_Sqlite.sqlite") # Connect to db
+
+print(dbListTables(con)) # Print list of available tables
+
+album_tbl <- tbl(con, "Album") %>% collect() # Retrieve "Album" table into local storage
+print(album_tbl)
+
+dbDisconnect(con) # Disconnect db session
+```
+
+# API
+Trying out a connection to multiple APIs containing Star Wars information and Stock Prices with credentials.
+```{r}
+#| include: false
+library(httr)
+library(glue)
+library(jsonlite)
+library(keyring)
+library(rstudioapi)
+```
+
+```{r}
+# Wrapped into a function
+sw_api <- function(path) {
+  url <- modify_url(url = "https://swapi.dev", path = glue("/api{path}"))
+  resp <- GET(url)
+  stop_for_status(resp) # automatically throws an error if a request did not succeed
+}
+
+resp <- sw_api("/people/1") # Retrieve info about Luke Skywalker
+
+content <- rawToChar(resp$content) %>% fromJSON() # Turn content into characters and convert json to list
+print(content)
+```
+
+Now I created a .Renviron file in the home folder and added the token in there. Now it can be accessed using `Sys.getenv('token')`.
+
+```{r}
+alphavantage_api_url <- "https://www.alphavantage.co/query"
+ticker               <- "WDI.DE"
+# You can pass all query parameters as a list to the query argument of GET()
+WDIQuote = GET(alphavantage_api_url, query = list('function' = "GLOBAL_QUOTE",
+                                       symbol     = ticker,
+                                       apikey     = Sys.getenv('token'))
+) %>% content()
+print(WDIQuote)
+```
+
+
+# WEB SCRAPING
+```{r}
+#| include: false
+library(rvest)
+library(stringr)
+```
+Trying out some webscraping examples from wikipedia and IMDB.
+```{r}
+url <- "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+
+sp_500 <- url %>%
+  # read the HTML from the webpage
+  read_html() %>%
+  # Get the nodes with the id
+  html_nodes(css = "#constituents") %>%
+  # html_nodes(xpath = "//*[@id='constituents']"") %>% 
+  # Extract the table and turn the list into a tibble
+  html_table() %>% 
+  .[[1]] %>% 
+  as_tibble()
+print(sp_500)
+```
+To try IMDB out I scraped the people that worked on "The Dark Knight" that are mentioned in the IMDB top 250 ratings page.
+```{r}
+url  <- "https://www.imdb.com/chart/top/?ref_=nv_mv_250"
+html <- url %>% 
+  read_html()
+
+people <- html %>% 
+  html_nodes(".titleColumn > a") %>% 
+  .[[3]] %>% 
+  html_attr("title")
+print(people)
+```
+
+# Functional Programming
+Following the example i printed some numbers and retrieved the possible bike colors from the data file.
+```{r}
+#| include: false
+library(purrr)
+```
+```{r}
+numbers <- c(1:3)
+numbers_list <- map(numbers, print)
+
+bike_data_lst <- fromJSON("../../src/bike_data.json")
+print(bike_data_lst %>% purrr::pluck("productDetail", "variationAttributes", "values", 1, "displayValue"))
+```
+
 # CHALLENGE
 
 Asking the API for the weather on Gran Canaria in this week.
