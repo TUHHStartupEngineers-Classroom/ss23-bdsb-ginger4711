@@ -188,11 +188,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Contents</h2>
    
   <ul class="collapse">
-<li><a href="#database" id="toc-database" class="nav-link active" data-scroll-target="#database"><span class="toc-section-number">1</span>  Database</a></li>
-  <li><a href="#api" id="toc-api" class="nav-link" data-scroll-target="#api"><span class="toc-section-number">2</span>  API</a></li>
-  <li><a href="#web-scraping" id="toc-web-scraping" class="nav-link" data-scroll-target="#web-scraping"><span class="toc-section-number">3</span>  WEB SCRAPING</a></li>
-  <li><a href="#functional-programming" id="toc-functional-programming" class="nav-link" data-scroll-target="#functional-programming"><span class="toc-section-number">4</span>  Functional Programming</a></li>
-  <li><a href="#challenge" id="toc-challenge" class="nav-link" data-scroll-target="#challenge"><span class="toc-section-number">5</span>  CHALLENGE</a></li>
+<li><a href="#challenge" id="toc-challenge" class="nav-link active" data-scroll-target="#challenge"><span class="toc-section-number">1</span>  CHALLENGE</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -216,442 +212,232 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
-</header><section id="database" class="level1" data-number="1"><h1 data-number="1">
-<span class="header-section-number">1</span> Database</h1>
-<p>Trying out a connection to a database containing music information using RSQLite.</p>
-<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-2_e66ea890bd0a112074f2f703873c7679">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>con <span class="ot">&lt;-</span> RSQLite<span class="sc">::</span><span class="fu">dbConnect</span>(<span class="at">drv    =</span> <span class="fu">SQLite</span>(), </span>
-<span id="cb1-2"><a href="#cb1-2"></a>                          <span class="at">dbname =</span> <span class="st">"../../src/Chinook_Sqlite.sqlite"</span>) <span class="co"># Connect to db</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">print</span>(<span class="fu">dbListTables</span>(con)) <span class="co"># Print list of available tables</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>#&gt;  [1] "Album"         "Artist"        "Customer"      "Employee"     
-#&gt;  [5] "Genre"         "Invoice"       "InvoiceLine"   "MediaType"    
-#&gt;  [9] "Playlist"      "PlaylistTrack" "Track"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>album_tbl <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"Album"</span>) <span class="sc">%&gt;%</span> <span class="fu">collect</span>() <span class="co"># Retrieve "Album" table into local storage</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">print</span>(album_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>#&gt; # A tibble: 347 x 3
-#&gt;    AlbumId Title                                 ArtistId
-#&gt;      &lt;int&gt; &lt;chr&gt;                                    &lt;int&gt;
-#&gt;  1       1 For Those About To Rock We Salute You        1
-#&gt;  2       2 Balls to the Wall                            2
-#&gt;  3       3 Restless and Wild                            2
-#&gt;  4       4 Let There Be Rock                            1
-#&gt;  5       5 Big Ones                                     3
-#&gt;  6       6 Jagged Little Pill                           4
-#&gt;  7       7 Facelift                                     5
-#&gt;  8       8 Warner 25 Anos                               6
-#&gt;  9       9 Plays Metallica By Four Cellos               7
-#&gt; 10      10 Audioslave                                   8
-#&gt; # i 337 more rows</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">dbDisconnect</span>(con) <span class="co"># Disconnect db session</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section><section id="api" class="level1" data-number="2"><h1 data-number="2">
-<span class="header-section-number">2</span> API</h1>
-<p>Trying out a connection to multiple APIs containing Star Wars information and Stock Prices with credentials.</p>
-<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-4_1a1723a0269ec56ce4f993ab82b9837e">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Wrapped into a function</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>sw_api <span class="ot">&lt;-</span> <span class="cf">function</span>(path) {</span>
-<span id="cb6-3"><a href="#cb6-3"></a>  url <span class="ot">&lt;-</span> <span class="fu">modify_url</span>(<span class="at">url =</span> <span class="st">"https://swapi.dev"</span>, <span class="at">path =</span> <span class="fu">glue</span>(<span class="st">"/api{path}"</span>))</span>
-<span id="cb6-4"><a href="#cb6-4"></a>  resp <span class="ot">&lt;-</span> <span class="fu">GET</span>(url)</span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">stop_for_status</span>(resp) <span class="co"># automatically throws an error if a request did not succeed</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>}</span>
-<span id="cb6-7"><a href="#cb6-7"></a></span>
-<span id="cb6-8"><a href="#cb6-8"></a>resp <span class="ot">&lt;-</span> <span class="fu">sw_api</span>(<span class="st">"/people/1"</span>) <span class="co"># Retrieve info about Luke Skywalker</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a></span>
-<span id="cb6-10"><a href="#cb6-10"></a>content <span class="ot">&lt;-</span> <span class="fu">rawToChar</span>(resp<span class="sc">$</span>content) <span class="sc">%&gt;%</span> <span class="fu">fromJSON</span>() <span class="co"># Turn content into characters and convert json to list</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="fu">print</span>(content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>#&gt; $name
-#&gt; [1] "Luke Skywalker"
-#&gt; 
-#&gt; $height
-#&gt; [1] "172"
-#&gt; 
-#&gt; $mass
-#&gt; [1] "77"
-#&gt; 
-#&gt; $hair_color
-#&gt; [1] "blond"
-#&gt; 
-#&gt; $skin_color
-#&gt; [1] "fair"
-#&gt; 
-#&gt; $eye_color
-#&gt; [1] "blue"
-#&gt; 
-#&gt; $birth_year
-#&gt; [1] "19BBY"
-#&gt; 
-#&gt; $gender
-#&gt; [1] "male"
-#&gt; 
-#&gt; $homeworld
-#&gt; [1] "https://swapi.dev/api/planets/1/"
-#&gt; 
-#&gt; $films
-#&gt; [1] "https://swapi.dev/api/films/1/" "https://swapi.dev/api/films/2/"
-#&gt; [3] "https://swapi.dev/api/films/3/" "https://swapi.dev/api/films/6/"
-#&gt; 
-#&gt; $species
-#&gt; list()
-#&gt; 
-#&gt; $vehicles
-#&gt; [1] "https://swapi.dev/api/vehicles/14/" "https://swapi.dev/api/vehicles/30/"
-#&gt; 
-#&gt; $starships
-#&gt; [1] "https://swapi.dev/api/starships/12/" "https://swapi.dev/api/starships/22/"
-#&gt; 
-#&gt; $created
-#&gt; [1] "2014-12-09T13:50:51.644000Z"
-#&gt; 
-#&gt; $edited
-#&gt; [1] "2014-12-20T21:17:56.891000Z"
-#&gt; 
-#&gt; $url
-#&gt; [1] "https://swapi.dev/api/people/1/"</code></pre>
-</div>
-</div>
-<p>Now I created a .Renviron file in the home folder and added the token in there. Now it can be accessed using <code>Sys.getenv('token')</code>.</p>
-<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-5_6a49e6d5dabc231ab45fde758c38fe86">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>alphavantage_api_url <span class="ot">&lt;-</span> <span class="st">"https://www.alphavantage.co/query"</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>ticker               <span class="ot">&lt;-</span> <span class="st">"WDI.DE"</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="co"># You can pass all query parameters as a list to the query argument of GET()</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>WDIQuote <span class="ot">=</span> <span class="fu">GET</span>(alphavantage_api_url, <span class="at">query =</span> <span class="fu">list</span>(<span class="st">'function'</span> <span class="ot">=</span> <span class="st">"GLOBAL_QUOTE"</span>,</span>
-<span id="cb8-5"><a href="#cb8-5"></a>                                       <span class="at">symbol     =</span> ticker,</span>
-<span id="cb8-6"><a href="#cb8-6"></a>                                       <span class="at">apikey     =</span> <span class="fu">Sys.getenv</span>(<span class="st">'token'</span>))</span>
-<span id="cb8-7"><a href="#cb8-7"></a>) <span class="sc">%&gt;%</span> <span class="fu">content</span>()</span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="fu">print</span>(WDIQuote)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>#&gt; $`Global Quote`
-#&gt; $`Global Quote`$`01. symbol`
-#&gt; [1] "WDI.DE"
-#&gt; 
-#&gt; $`Global Quote`$`02. open`
-#&gt; [1] "0.4021"
-#&gt; 
-#&gt; $`Global Quote`$`03. high`
-#&gt; [1] "0.4099"
-#&gt; 
-#&gt; $`Global Quote`$`04. low`
-#&gt; [1] "0.3961"
-#&gt; 
-#&gt; $`Global Quote`$`05. price`
-#&gt; [1] "0.3985"
-#&gt; 
-#&gt; $`Global Quote`$`06. volume`
-#&gt; [1] "210849"
-#&gt; 
-#&gt; $`Global Quote`$`07. latest trading day`
-#&gt; [1] "2021-03-01"
-#&gt; 
-#&gt; $`Global Quote`$`08. previous close`
-#&gt; [1] "0.4109"
-#&gt; 
-#&gt; $`Global Quote`$`09. change`
-#&gt; [1] "-0.0124"
-#&gt; 
-#&gt; $`Global Quote`$`10. change percent`
-#&gt; [1] "-3.0178%"</code></pre>
-</div>
-</div>
-</section><section id="web-scraping" class="level1" data-number="3"><h1 data-number="3">
-<span class="header-section-number">3</span> WEB SCRAPING</h1>
-<p>Trying out some webscraping examples from wikipedia and IMDB.</p>
-<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-7_321676c0f3f756b1663c07328b328d60">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a></span>
-<span id="cb10-3"><a href="#cb10-3"></a>sp_500 <span class="ot">&lt;-</span> url <span class="sc">%&gt;%</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>  <span class="co"># read the HTML from the webpage</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a>  <span class="co"># Get the nodes with the id</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a>  <span class="fu">html_nodes</span>(<span class="at">css =</span> <span class="st">"#constituents"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb10-8"><a href="#cb10-8"></a>  <span class="co"># html_nodes(xpath = "//*[@id='constituents']"") %&gt;% </span></span>
-<span id="cb10-9"><a href="#cb10-9"></a>  <span class="co"># Extract the table and turn the list into a tibble</span></span>
-<span id="cb10-10"><a href="#cb10-10"></a>  <span class="fu">html_table</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb10-11"><a href="#cb10-11"></a>  .[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
-<span id="cb10-12"><a href="#cb10-12"></a>  <span class="fu">as_tibble</span>()</span>
-<span id="cb10-13"><a href="#cb10-13"></a><span class="fu">print</span>(sp_500)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>#&gt; # A tibble: 503 x 8
-#&gt;    Symbol Security      `GICS Sector` `GICS Sub-Industry` Headquarters Locatio~1
-#&gt;    &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;               &lt;chr&gt;                 
-#&gt;  1 MMM    3M            Industrials   Industrial Conglom~ Saint Paul, Minnesota 
-#&gt;  2 AOS    A. O. Smith   Industrials   Building Products   Milwaukee, Wisconsin  
-#&gt;  3 ABT    Abbott        Health Care   Health Care Equipm~ North Chicago, Illino~
-#&gt;  4 ABBV   AbbVie        Health Care   Pharmaceuticals     North Chicago, Illino~
-#&gt;  5 ACN    Accenture     Information ~ IT Consulting &amp; Ot~ Dublin, Ireland       
-#&gt;  6 ATVI   Activision B~ Communicatio~ Interactive Home E~ Santa Monica, Califor~
-#&gt;  7 ADM    ADM           Consumer Sta~ Agricultural Produ~ Chicago, Illinois     
-#&gt;  8 ADBE   Adobe Inc.    Information ~ Application Softwa~ San Jose, California  
-#&gt;  9 ADP    ADP           Industrials   Human Resource &amp; E~ Roseland, New Jersey  
-#&gt; 10 AAP    Advance Auto~ Consumer Dis~ Automotive Retail   Raleigh, North Caroli~
-#&gt; # i 493 more rows
-#&gt; # i abbreviated name: 1: `Headquarters Location`
-#&gt; # i 3 more variables: `Date added` &lt;chr&gt;, CIK &lt;int&gt;, Founded &lt;chr&gt;</code></pre>
-</div>
-</div>
-<p>To try IMDB out I scraped the people that worked on “The Dark Knight” that are mentioned in the IMDB top 250 ratings page.</p>
-<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-8_dbc97de106ed393ce0bcc59175ea4691">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>url  <span class="ot">&lt;-</span> <span class="st">"https://www.imdb.com/chart/top/?ref_=nv_mv_250"</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>html <span class="ot">&lt;-</span> url <span class="sc">%&gt;%</span> </span>
-<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">read_html</span>()</span>
-<span id="cb12-4"><a href="#cb12-4"></a></span>
-<span id="cb12-5"><a href="#cb12-5"></a>people <span class="ot">&lt;-</span> html <span class="sc">%&gt;%</span> </span>
-<span id="cb12-6"><a href="#cb12-6"></a>  <span class="fu">html_nodes</span>(<span class="st">".titleColumn &gt; a"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-7"><a href="#cb12-7"></a>  .[[<span class="dv">3</span>]] <span class="sc">%&gt;%</span> </span>
-<span id="cb12-8"><a href="#cb12-8"></a>  <span class="fu">html_attr</span>(<span class="st">"title"</span>)</span>
-<span id="cb12-9"><a href="#cb12-9"></a><span class="fu">print</span>(people)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>#&gt; [1] "Christopher Nolan (dir.), Christian Bale, Heath Ledger"</code></pre>
-</div>
-</div>
-</section><section id="functional-programming" class="level1" data-number="4"><h1 data-number="4">
-<span class="header-section-number">4</span> Functional Programming</h1>
-<p>Following the example i printed some numbers and retrieved the possible bike colors from the data file.</p>
-<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-10_7a6eca5e9706b9c0f8759707f3fd96e7">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>numbers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
-<span id="cb14-2"><a href="#cb14-2"></a>numbers_list <span class="ot">&lt;-</span> <span class="fu">map</span>(numbers, print)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>#&gt; [1] 1
-#&gt; [1] 2
-#&gt; [1] 3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>bike_data_lst <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"../../src/bike_data.json"</span>)</span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">print</span>(bike_data_lst <span class="sc">%&gt;%</span> purrr<span class="sc">::</span><span class="fu">pluck</span>(<span class="st">"productDetail"</span>, <span class="st">"variationAttributes"</span>, <span class="st">"values"</span>, <span class="dv">1</span>, <span class="st">"displayValue"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>#&gt; [1] "Stealth"     "aero silver"</code></pre>
-</div>
-</div>
-</section><section id="challenge" class="level1" data-number="5"><h1 data-number="5">
-<span class="header-section-number">5</span> CHALLENGE</h1>
+</header><section id="challenge" class="level1" data-number="1"><h1 data-number="1">
+<span class="header-section-number">1</span> CHALLENGE</h1>
 <p>Asking the API for the weather on Gran Canaria in this week.</p>
-<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-11_8f550892946de8c7392f8339ec607909">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Task 1. Asking an API.</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb18-3"><a href="#cb18-3"></a></span>
-<span id="cb18-4"><a href="#cb18-4"></a>weather_api <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
-<span id="cb18-5"><a href="#cb18-5"></a>  url <span class="ot">&lt;-</span> <span class="fu">modify_url</span>(<span class="at">url =</span> <span class="st">"https://api.open-meteo.com/v1/forecast?latitude=27.7564556&amp;longitude=-15.5910148&amp;current_weather=true&amp;hourly=temperature_2m,relativehumidity_2m,windspeed_10m"</span>)</span>
-<span id="cb18-6"><a href="#cb18-6"></a>  resp <span class="ot">&lt;-</span> <span class="fu">GET</span>(url)</span>
-<span id="cb18-7"><a href="#cb18-7"></a>  <span class="fu">stop_for_status</span>(resp) <span class="co"># automatically throws an error if a request did not succeed</span></span>
-<span id="cb18-8"><a href="#cb18-8"></a>}</span>
-<span id="cb18-9"><a href="#cb18-9"></a></span>
-<span id="cb18-10"><a href="#cb18-10"></a>weather <span class="ot">&lt;-</span> <span class="fu">weather_api</span>() <span class="sc">%&gt;%</span> <span class="fu">content</span>()</span>
-<span id="cb18-11"><a href="#cb18-11"></a></span>
-<span id="cb18-12"><a href="#cb18-12"></a>weather_tbl <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">time =</span> weather[[<span class="st">"hourly"</span>]][[<span class="st">"time"</span>]],<span class="at">temp =</span> weather[[<span class="st">"hourly"</span>]][[<span class="st">"temperature_2m"</span>]])</span>
-<span id="cb18-13"><a href="#cb18-13"></a>weather_df <span class="ot">&lt;-</span> weather_tbl <span class="sc">%&gt;%</span> data.frame</span>
-<span id="cb18-14"><a href="#cb18-14"></a><span class="fu">print</span>(weather_df) <span class="co"># Print weather as df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-1_bfd8a7309ddf347e1972bc0798ee5c43">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Task 1. Asking an API.</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a>weather_api <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  url <span class="ot">&lt;-</span> <span class="fu">modify_url</span>(<span class="at">url =</span> <span class="st">"https://api.open-meteo.com/v1/forecast?latitude=27.7564556&amp;longitude=-15.5910148&amp;current_weather=true&amp;hourly=temperature_2m,relativehumidity_2m,windspeed_10m"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  resp <span class="ot">&lt;-</span> <span class="fu">GET</span>(url)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>  <span class="fu">stop_for_status</span>(resp) <span class="co"># automatically throws an error if a request did not succeed</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>}</span>
+<span id="cb1-9"><a href="#cb1-9"></a></span>
+<span id="cb1-10"><a href="#cb1-10"></a>weather <span class="ot">&lt;-</span> <span class="fu">weather_api</span>() <span class="sc">%&gt;%</span> <span class="fu">content</span>()</span>
+<span id="cb1-11"><a href="#cb1-11"></a></span>
+<span id="cb1-12"><a href="#cb1-12"></a>weather_tbl <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">time =</span> weather[[<span class="st">"hourly"</span>]][[<span class="st">"time"</span>]],<span class="at">temp =</span> weather[[<span class="st">"hourly"</span>]][[<span class="st">"temperature_2m"</span>]])</span>
+<span id="cb1-13"><a href="#cb1-13"></a>weather_df <span class="ot">&lt;-</span> weather_tbl <span class="sc">%&gt;%</span> data.frame</span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="fu">print</span>(weather_df) <span class="co"># Print weather as df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt;                 time temp
-#&gt; 1   2023-04-29T00:00 22.6
-#&gt; 2   2023-04-29T01:00 22.1
-#&gt; 3   2023-04-29T02:00 21.7
-#&gt; 4   2023-04-29T03:00 21.5
-#&gt; 5   2023-04-29T04:00 21.4
-#&gt; 6   2023-04-29T05:00 21.3
-#&gt; 7   2023-04-29T06:00 21.9
-#&gt; 8   2023-04-29T07:00 21.6
-#&gt; 9   2023-04-29T08:00 23.4
-#&gt; 10  2023-04-29T09:00 24.9
-#&gt; 11  2023-04-29T10:00 26.3
-#&gt; 12  2023-04-29T11:00 27.7
-#&gt; 13  2023-04-29T12:00 28.5
-#&gt; 14  2023-04-29T13:00 29.4
-#&gt; 15  2023-04-29T14:00 30.2
-#&gt; 16  2023-04-29T15:00 30.9
-#&gt; 17  2023-04-29T16:00 30.5
-#&gt; 18  2023-04-29T17:00 29.7
-#&gt; 19  2023-04-29T18:00 28.7
-#&gt; 20  2023-04-29T19:00 27.5
-#&gt; 21  2023-04-29T20:00 26.3
-#&gt; 22  2023-04-29T21:00 25.5
-#&gt; 23  2023-04-29T22:00 25.1
-#&gt; 24  2023-04-29T23:00 24.8
-#&gt; 25  2023-04-30T00:00 24.7
-#&gt; 26  2023-04-30T01:00 24.6
-#&gt; 27  2023-04-30T02:00 24.2
-#&gt; 28  2023-04-30T03:00 24.1
-#&gt; 29  2023-04-30T04:00 24.2
-#&gt; 30  2023-04-30T05:00 23.9
-#&gt; 31  2023-04-30T06:00 23.6
-#&gt; 32  2023-04-30T07:00 23.6
-#&gt; 33  2023-04-30T08:00 24.9
-#&gt; 34  2023-04-30T09:00 26.9
-#&gt; 35  2023-04-30T10:00 28.6
-#&gt; 36  2023-04-30T11:00 30.1
-#&gt; 37  2023-04-30T12:00 30.9
-#&gt; 38  2023-04-30T13:00   31
-#&gt; 39  2023-04-30T14:00 31.3
-#&gt; 40  2023-04-30T15:00   31
-#&gt; 41  2023-04-30T16:00   30
-#&gt; 42  2023-04-30T17:00 28.9
-#&gt; 43  2023-04-30T18:00 28.5
-#&gt; 44  2023-04-30T19:00 28.1
-#&gt; 45  2023-04-30T20:00 26.6
-#&gt; 46  2023-04-30T21:00 25.9
-#&gt; 47  2023-04-30T22:00 25.4
-#&gt; 48  2023-04-30T23:00 25.3
-#&gt; 49  2023-05-01T00:00 25.2
-#&gt; 50  2023-05-01T01:00   25
-#&gt; 51  2023-05-01T02:00 24.8
-#&gt; 52  2023-05-01T03:00 24.4
-#&gt; 53  2023-05-01T04:00 23.9
-#&gt; 54  2023-05-01T05:00 23.6
-#&gt; 55  2023-05-01T06:00 23.3
-#&gt; 56  2023-05-01T07:00 23.3
-#&gt; 57  2023-05-01T08:00 24.2
-#&gt; 58  2023-05-01T09:00 25.7
-#&gt; 59  2023-05-01T10:00 27.2
-#&gt; 60  2023-05-01T11:00 28.3
-#&gt; 61  2023-05-01T12:00 29.1
-#&gt; 62  2023-05-01T13:00 29.7
-#&gt; 63  2023-05-01T14:00 30.2
-#&gt; 64  2023-05-01T15:00 30.5
-#&gt; 65  2023-05-01T16:00 30.4
-#&gt; 66  2023-05-01T17:00 29.3
-#&gt; 67  2023-05-01T18:00   29
-#&gt; 68  2023-05-01T19:00 27.8
-#&gt; 69  2023-05-01T20:00   26
-#&gt; 70  2023-05-01T21:00 24.3
-#&gt; 71  2023-05-01T22:00 24.5
-#&gt; 72  2023-05-01T23:00 24.6
-#&gt; 73  2023-05-02T00:00 24.6
-#&gt; 74  2023-05-02T01:00 24.3
-#&gt; 75  2023-05-02T02:00 22.9
-#&gt; 76  2023-05-02T03:00 21.4
-#&gt; 77  2023-05-02T04:00 21.1
-#&gt; 78  2023-05-02T05:00   21
-#&gt; 79  2023-05-02T06:00   21
-#&gt; 80  2023-05-02T07:00 20.7
-#&gt; 81  2023-05-02T08:00 22.7
-#&gt; 82  2023-05-02T09:00 24.4
-#&gt; 83  2023-05-02T10:00 25.1
-#&gt; 84  2023-05-02T11:00 25.8
-#&gt; 85  2023-05-02T12:00 26.9
-#&gt; 86  2023-05-02T13:00 27.4
-#&gt; 87  2023-05-02T14:00 27.4
-#&gt; 88  2023-05-02T15:00 27.8
-#&gt; 89  2023-05-02T16:00 27.9
-#&gt; 90  2023-05-02T17:00 27.5
-#&gt; 91  2023-05-02T18:00   26
-#&gt; 92  2023-05-02T19:00 25.1
-#&gt; 93  2023-05-02T20:00   24
-#&gt; 94  2023-05-02T21:00 22.9
-#&gt; 95  2023-05-02T22:00 22.2
-#&gt; 96  2023-05-02T23:00 21.7
-#&gt; 97  2023-05-03T00:00 21.3
-#&gt; 98  2023-05-03T01:00 21.2
-#&gt; 99  2023-05-03T02:00 20.9
-#&gt; 100 2023-05-03T03:00 20.5
-#&gt; 101 2023-05-03T04:00 20.4
-#&gt; 102 2023-05-03T05:00 20.6
-#&gt; 103 2023-05-03T06:00 20.6
-#&gt; 104 2023-05-03T07:00 21.5
-#&gt; 105 2023-05-03T08:00   23
-#&gt; 106 2023-05-03T09:00 24.8
-#&gt; 107 2023-05-03T10:00 25.8
-#&gt; 108 2023-05-03T11:00 26.7
-#&gt; 109 2023-05-03T12:00 27.4
-#&gt; 110 2023-05-03T13:00 27.4
-#&gt; 111 2023-05-03T14:00 27.2
-#&gt; 112 2023-05-03T15:00 26.8
-#&gt; 113 2023-05-03T16:00 26.5
-#&gt; 114 2023-05-03T17:00 26.2
-#&gt; 115 2023-05-03T18:00 25.6
-#&gt; 116 2023-05-03T19:00 24.9
-#&gt; 117 2023-05-03T20:00 24.1
-#&gt; 118 2023-05-03T21:00 23.2
-#&gt; 119 2023-05-03T22:00 22.9
-#&gt; 120 2023-05-03T23:00 22.7
-#&gt; 121 2023-05-04T00:00 22.4
-#&gt; 122 2023-05-04T01:00 22.2
-#&gt; 123 2023-05-04T02:00 21.9
-#&gt; 124 2023-05-04T03:00 21.6
-#&gt; 125 2023-05-04T04:00 21.3
-#&gt; 126 2023-05-04T05:00 21.1
-#&gt; 127 2023-05-04T06:00 20.8
-#&gt; 128 2023-05-04T07:00   21
-#&gt; 129 2023-05-04T08:00   22
-#&gt; 130 2023-05-04T09:00 23.3
-#&gt; 131 2023-05-04T10:00 24.3
-#&gt; 132 2023-05-04T11:00 25.4
-#&gt; 133 2023-05-04T12:00 26.5
-#&gt; 134 2023-05-04T13:00 26.9
-#&gt; 135 2023-05-04T14:00 27.1
-#&gt; 136 2023-05-04T15:00   27
-#&gt; 137 2023-05-04T16:00 26.6
-#&gt; 138 2023-05-04T17:00 26.1
-#&gt; 139 2023-05-04T18:00 25.1
-#&gt; 140 2023-05-04T19:00 24.2
-#&gt; 141 2023-05-04T20:00 23.2
-#&gt; 142 2023-05-04T21:00   22
-#&gt; 143 2023-05-04T22:00 21.3
-#&gt; 144 2023-05-04T23:00 20.8
-#&gt; 145 2023-05-05T00:00 20.3
-#&gt; 146 2023-05-05T01:00 19.8
-#&gt; 147 2023-05-05T02:00 19.5
-#&gt; 148 2023-05-05T03:00 19.1
-#&gt; 149 2023-05-05T04:00 18.8
-#&gt; 150 2023-05-05T05:00 18.6
-#&gt; 151 2023-05-05T06:00 18.8
-#&gt; 152 2023-05-05T07:00 19.7
-#&gt; 153 2023-05-05T08:00 21.1
-#&gt; 154 2023-05-05T09:00 22.8
-#&gt; 155 2023-05-05T10:00 23.9
-#&gt; 156 2023-05-05T11:00   25
-#&gt; 157 2023-05-05T12:00 26.1
-#&gt; 158 2023-05-05T13:00 26.6
-#&gt; 159 2023-05-05T14:00 26.9
-#&gt; 160 2023-05-05T15:00 26.8
-#&gt; 161 2023-05-05T16:00 26.4
-#&gt; 162 2023-05-05T17:00 25.6
-#&gt; 163 2023-05-05T18:00 24.6
-#&gt; 164 2023-05-05T19:00 23.8
-#&gt; 165 2023-05-05T20:00   23
-#&gt; 166 2023-05-05T21:00 22.1
-#&gt; 167 2023-05-05T22:00 21.7
-#&gt; 168 2023-05-05T23:00 21.5</code></pre>
+#&gt; 1   2023-05-02T00:00 23.8
+#&gt; 2   2023-05-02T01:00 22.7
+#&gt; 3   2023-05-02T02:00 22.3
+#&gt; 4   2023-05-02T03:00 21.8
+#&gt; 5   2023-05-02T04:00 21.4
+#&gt; 6   2023-05-02T05:00 20.9
+#&gt; 7   2023-05-02T06:00 20.4
+#&gt; 8   2023-05-02T07:00 20.4
+#&gt; 9   2023-05-02T08:00 22.2
+#&gt; 10  2023-05-02T09:00 23.8
+#&gt; 11  2023-05-02T10:00 25.4
+#&gt; 12  2023-05-02T11:00 26.5
+#&gt; 13  2023-05-02T12:00 26.9
+#&gt; 14  2023-05-02T13:00 26.7
+#&gt; 15  2023-05-02T14:00 26.2
+#&gt; 16  2023-05-02T15:00 27.5
+#&gt; 17  2023-05-02T16:00 29.2
+#&gt; 18  2023-05-02T17:00 29.1
+#&gt; 19  2023-05-02T18:00 26.7
+#&gt; 20  2023-05-02T19:00 24.9
+#&gt; 21  2023-05-02T20:00 23.9
+#&gt; 22  2023-05-02T21:00 22.8
+#&gt; 23  2023-05-02T22:00 22.1
+#&gt; 24  2023-05-02T23:00 21.7
+#&gt; 25  2023-05-03T00:00 21.3
+#&gt; 26  2023-05-03T01:00 21.2
+#&gt; 27  2023-05-03T02:00 21.2
+#&gt; 28  2023-05-03T03:00 21.5
+#&gt; 29  2023-05-03T04:00 21.2
+#&gt; 30  2023-05-03T05:00 20.8
+#&gt; 31  2023-05-03T06:00   20
+#&gt; 32  2023-05-03T07:00 20.3
+#&gt; 33  2023-05-03T08:00 21.3
+#&gt; 34  2023-05-03T09:00 22.2
+#&gt; 35  2023-05-03T10:00 24.5
+#&gt; 36  2023-05-03T11:00 25.5
+#&gt; 37  2023-05-03T12:00   26
+#&gt; 38  2023-05-03T13:00 25.8
+#&gt; 39  2023-05-03T14:00 25.8
+#&gt; 40  2023-05-03T15:00 26.9
+#&gt; 41  2023-05-03T16:00 27.3
+#&gt; 42  2023-05-03T17:00 26.9
+#&gt; 43  2023-05-03T18:00 25.9
+#&gt; 44  2023-05-03T19:00 24.5
+#&gt; 45  2023-05-03T20:00 23.6
+#&gt; 46  2023-05-03T21:00 23.1
+#&gt; 47  2023-05-03T22:00 22.6
+#&gt; 48  2023-05-03T23:00 22.1
+#&gt; 49  2023-05-04T00:00 21.8
+#&gt; 50  2023-05-04T01:00 21.4
+#&gt; 51  2023-05-04T02:00 21.1
+#&gt; 52  2023-05-04T03:00 20.7
+#&gt; 53  2023-05-04T04:00 20.5
+#&gt; 54  2023-05-04T05:00 20.3
+#&gt; 55  2023-05-04T06:00   20
+#&gt; 56  2023-05-04T07:00 19.8
+#&gt; 57  2023-05-04T08:00 20.5
+#&gt; 58  2023-05-04T09:00 21.9
+#&gt; 59  2023-05-04T10:00 23.4
+#&gt; 60  2023-05-04T11:00 24.8
+#&gt; 61  2023-05-04T12:00 25.9
+#&gt; 62  2023-05-04T13:00 26.7
+#&gt; 63  2023-05-04T14:00 27.2
+#&gt; 64  2023-05-04T15:00 27.1
+#&gt; 65  2023-05-04T16:00 26.6
+#&gt; 66  2023-05-04T17:00 25.7
+#&gt; 67  2023-05-04T18:00 24.4
+#&gt; 68  2023-05-04T19:00 22.8
+#&gt; 69  2023-05-04T20:00 21.2
+#&gt; 70  2023-05-04T21:00 20.2
+#&gt; 71  2023-05-04T22:00 19.8
+#&gt; 72  2023-05-04T23:00 19.6
+#&gt; 73  2023-05-05T00:00 19.5
+#&gt; 74  2023-05-05T01:00 19.3
+#&gt; 75  2023-05-05T02:00 19.2
+#&gt; 76  2023-05-05T03:00 19.1
+#&gt; 77  2023-05-05T04:00 19.1
+#&gt; 78  2023-05-05T05:00 19.1
+#&gt; 79  2023-05-05T06:00   19
+#&gt; 80  2023-05-05T07:00   19
+#&gt; 81  2023-05-05T08:00 19.9
+#&gt; 82  2023-05-05T09:00 21.5
+#&gt; 83  2023-05-05T10:00 22.9
+#&gt; 84  2023-05-05T11:00   24
+#&gt; 85  2023-05-05T12:00   25
+#&gt; 86  2023-05-05T13:00 25.6
+#&gt; 87  2023-05-05T14:00 25.9
+#&gt; 88  2023-05-05T15:00 26.1
+#&gt; 89  2023-05-05T16:00 26.1
+#&gt; 90  2023-05-05T17:00 25.5
+#&gt; 91  2023-05-05T18:00 24.3
+#&gt; 92  2023-05-05T19:00   23
+#&gt; 93  2023-05-05T20:00 21.4
+#&gt; 94  2023-05-05T21:00 20.4
+#&gt; 95  2023-05-05T22:00 19.8
+#&gt; 96  2023-05-05T23:00 19.4
+#&gt; 97  2023-05-06T00:00 19.2
+#&gt; 98  2023-05-06T01:00   19
+#&gt; 99  2023-05-06T02:00   19
+#&gt; 100 2023-05-06T03:00   19
+#&gt; 101 2023-05-06T04:00   19
+#&gt; 102 2023-05-06T05:00 18.9
+#&gt; 103 2023-05-06T06:00 18.9
+#&gt; 104 2023-05-06T07:00 21.3
+#&gt; 105 2023-05-06T08:00 22.3
+#&gt; 106 2023-05-06T09:00 23.8
+#&gt; 107 2023-05-06T10:00 24.9
+#&gt; 108 2023-05-06T11:00   26
+#&gt; 109 2023-05-06T12:00 27.1
+#&gt; 110 2023-05-06T13:00 27.5
+#&gt; 111 2023-05-06T14:00 27.7
+#&gt; 112 2023-05-06T15:00 27.6
+#&gt; 113 2023-05-06T16:00   27
+#&gt; 114 2023-05-06T17:00 26.1
+#&gt; 115 2023-05-06T18:00 24.9
+#&gt; 116 2023-05-06T19:00 24.1
+#&gt; 117 2023-05-06T20:00 23.4
+#&gt; 118 2023-05-06T21:00 22.7
+#&gt; 119 2023-05-06T22:00 22.5
+#&gt; 120 2023-05-06T23:00 22.5
+#&gt; 121 2023-05-07T00:00 22.6
+#&gt; 122 2023-05-07T01:00 22.5
+#&gt; 123 2023-05-07T02:00 22.4
+#&gt; 124 2023-05-07T03:00 22.3
+#&gt; 125 2023-05-07T04:00 22.1
+#&gt; 126 2023-05-07T05:00 21.9
+#&gt; 127 2023-05-07T06:00 22.1
+#&gt; 128 2023-05-07T07:00 22.8
+#&gt; 129 2023-05-07T08:00 23.8
+#&gt; 130 2023-05-07T09:00 25.4
+#&gt; 131 2023-05-07T10:00 26.6
+#&gt; 132 2023-05-07T11:00 27.9
+#&gt; 133 2023-05-07T12:00 29.2
+#&gt; 134 2023-05-07T13:00 29.6
+#&gt; 135 2023-05-07T14:00 29.7
+#&gt; 136 2023-05-07T15:00 29.4
+#&gt; 137 2023-05-07T16:00   29
+#&gt; 138 2023-05-07T17:00 28.3
+#&gt; 139 2023-05-07T18:00 27.3
+#&gt; 140 2023-05-07T19:00 26.4
+#&gt; 141 2023-05-07T20:00 25.3
+#&gt; 142 2023-05-07T21:00 24.3
+#&gt; 143 2023-05-07T22:00 24.1
+#&gt; 144 2023-05-07T23:00 24.1
+#&gt; 145 2023-05-08T00:00 24.1
+#&gt; 146 2023-05-08T01:00   24
+#&gt; 147 2023-05-08T02:00 23.9
+#&gt; 148 2023-05-08T03:00 23.8
+#&gt; 149 2023-05-08T04:00 23.7
+#&gt; 150 2023-05-08T05:00 23.6
+#&gt; 151 2023-05-08T06:00 23.9
+#&gt; 152 2023-05-08T07:00 24.7
+#&gt; 153 2023-05-08T08:00 25.8
+#&gt; 154 2023-05-08T09:00 27.4
+#&gt; 155 2023-05-08T10:00 28.8
+#&gt; 156 2023-05-08T11:00 30.3
+#&gt; 157 2023-05-08T12:00 31.8
+#&gt; 158 2023-05-08T13:00 32.5
+#&gt; 159 2023-05-08T14:00 32.8
+#&gt; 160 2023-05-08T15:00 32.8
+#&gt; 161 2023-05-08T16:00 32.3
+#&gt; 162 2023-05-08T17:00 31.5
+#&gt; 163 2023-05-08T18:00 30.4
+#&gt; 164 2023-05-08T19:00 29.6
+#&gt; 165 2023-05-08T20:00 28.7
+#&gt; 166 2023-05-08T21:00 27.9
+#&gt; 167 2023-05-08T22:00 27.7
+#&gt; 168 2023-05-08T23:00 27.8</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>weather_df<span class="sc">$</span>time <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.POSIXct</span>(<span class="fu">strptime</span>(weather_df<span class="sc">$</span>time, <span class="st">"%Y-%m-%dT%H:%M"</span>))) <span class="co"># Convert time to numberic</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>weather_df<span class="sc">$</span>temp <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(weather_df<span class="sc">$</span>temp) <span class="co"># Convert temp to numberic</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a></span>
-<span id="cb20-4"><a href="#cb20-4"></a><span class="fu">ggplot</span>(weather_df, <span class="fu">aes</span>(time, temp)) <span class="sc">+</span></span>
-<span id="cb20-5"><a href="#cb20-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">40</span>)) <span class="co"># Ploting weather</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>weather_df<span class="sc">$</span>time <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.POSIXct</span>(<span class="fu">strptime</span>(weather_df<span class="sc">$</span>time, <span class="st">"%Y-%m-%dT%H:%M"</span>))) <span class="co"># Convert time to numberic</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>weather_df<span class="sc">$</span>temp <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(weather_df<span class="sc">$</span>temp) <span class="co"># Convert temp to numberic</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="fu">ggplot</span>(weather_df, <span class="fu">aes</span>(time, temp)) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">40</span>)) <span class="co"># Ploting weather</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="02_data_acquisition_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="02_data_acquisition_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></a></p>
+<figure class="figure"><p><a href="02_data_acquisition_files/figure-html/unnamed-chunk-1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="02_data_acquisition_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-12_d1b0ccd4374873daf9a9f295ab047510">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># Task 2. Looking at other bike shops.</span></span>
-<span id="cb21-2"><a href="#cb21-2"></a></span>
-<span id="cb21-3"><a href="#cb21-3"></a><span class="co"># Radon-bikes mountainbike category</span></span>
-<span id="cb21-4"><a href="#cb21-4"></a>url <span class="ot">&lt;-</span> <span class="st">"https://www.radon-bikes.de/e-bike/mountainbike/"</span></span>
-<span id="cb21-5"><a href="#cb21-5"></a></span>
-<span id="cb21-6"><a href="#cb21-6"></a><span class="co"># Retrieve names from bikeTitle class</span></span>
-<span id="cb21-7"><a href="#cb21-7"></a>bike_names <span class="ot">&lt;-</span> url <span class="sc">%&gt;%</span> </span>
-<span id="cb21-8"><a href="#cb21-8"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb21-9"><a href="#cb21-9"></a>  <span class="fu">html_nodes</span>(<span class="st">".bikeTitle &gt; h4"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-10"><a href="#cb21-10"></a>  <span class="fu">html_text</span>() </span>
-<span id="cb21-11"><a href="#cb21-11"></a></span>
-<span id="cb21-12"><a href="#cb21-12"></a><span class="co"># Retrieve prices from info class</span></span>
-<span id="cb21-13"><a href="#cb21-13"></a>bike_prices <span class="ot">&lt;-</span> url <span class="sc">%&gt;%</span> </span>
-<span id="cb21-14"><a href="#cb21-14"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb21-15"><a href="#cb21-15"></a>  <span class="fu">html_nodes</span>(<span class="st">".info &gt; div &gt; div &gt; span"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-16"><a href="#cb21-16"></a>  <span class="fu">html_text</span>()</span>
-<span id="cb21-17"><a href="#cb21-17"></a><span class="co"># Since there is a second price in pounds sterling we remove those and only look at the price in euros</span></span>
-<span id="cb21-18"><a href="#cb21-18"></a>bike_prices <span class="ot">&lt;-</span> bike_prices[<span class="fu">seq</span>(<span class="dv">1</span>,<span class="fu">length</span>(bike_prices),<span class="dv">2</span>)]</span>
-<span id="cb21-19"><a href="#cb21-19"></a></span>
-<span id="cb21-20"><a href="#cb21-20"></a><span class="co"># Transform into tibble and print</span></span>
-<span id="cb21-21"><a href="#cb21-21"></a><span class="fu">tibble</span>(<span class="at">name =</span> bike_names,<span class="at">price =</span> bike_prices) <span class="sc">%&gt;%</span> <span class="fu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="02_data_acquisition_cache/html/unnamed-chunk-2_d6839d88fb10fbd1529c2daf7cada699">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Task 2. Looking at other bike shops.</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co"># Radon-bikes mountainbike category</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>url <span class="ot">&lt;-</span> <span class="st">"https://www.radon-bikes.de/e-bike/mountainbike/"</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co"># Retrieve names from bikeTitle class</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>bike_names <span class="ot">&lt;-</span> url <span class="sc">%&gt;%</span> </span>
+<span id="cb4-8"><a href="#cb4-8"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-9"><a href="#cb4-9"></a>  <span class="fu">html_nodes</span>(<span class="st">".bikeTitle &gt; h4"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>  <span class="fu">html_text</span>() </span>
+<span id="cb4-11"><a href="#cb4-11"></a></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co"># Retrieve prices from info class</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>bike_prices <span class="ot">&lt;-</span> url <span class="sc">%&gt;%</span> </span>
+<span id="cb4-14"><a href="#cb4-14"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-15"><a href="#cb4-15"></a>  <span class="fu">html_nodes</span>(<span class="st">".info &gt; div &gt; div &gt; span"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a>  <span class="fu">html_text</span>()</span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="co"># Since there is a second price in pounds sterling we remove those and only look at the price in euros</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a>bike_prices <span class="ot">&lt;-</span> bike_prices[<span class="fu">seq</span>(<span class="dv">1</span>,<span class="fu">length</span>(bike_prices),<span class="dv">2</span>)]</span>
+<span id="cb4-19"><a href="#cb4-19"></a></span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="co"># Transform into tibble and print</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a><span class="fu">tibble</span>(<span class="at">name =</span> bike_names,<span class="at">price =</span> bike_prices) <span class="sc">%&gt;%</span> <span class="fu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#&gt; # A tibble: 6 x 2
+<pre><code>#&gt; # A tibble: 6 × 2
 #&gt;   name              price
 #&gt;   &lt;chr&gt;             &lt;chr&gt;
 #&gt; 1 RENDER AL         3999 
@@ -661,7 +447,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; 5 ZR TEAM HYBRID CX 1799 
 #&gt; 6 ZR LADY HYBRID CX 2499</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># Since there are only 6 different bikes in the mountainbike category, only these are shown</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Since there are only 6 different bikes in the mountainbike category, only these are shown</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
@@ -914,7 +700,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","selector":".lightbox","loop":true,"closeEffect":"zoom","openEffect":"zoom"});</script>
+<script>var lightboxQuarto = GLightbox({"loop":true,"descPosition":"bottom","closeEffect":"zoom","openEffect":"zoom","selector":".lightbox"});</script>
 
 
 </body></html>
