@@ -8,6 +8,7 @@ author: "Christian Sühl"
 Trying out a connection to a database containing music information using RSQLite.
 ```{r}
 #| include: false
+library(rmarkdown)
 library(RSQLite)
 library(DBI)
 library(dplyr)

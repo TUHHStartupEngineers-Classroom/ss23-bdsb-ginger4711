@@ -10,7 +10,8 @@ author: "Christian Sühl"
 
 ```{r}
 #| include: false
-library("tidyverse")
+library(tidyverse)
+library(rmarkdown)
 ```
 ```{r}
 tibble(
@@ -35,7 +36,6 @@ readr::problems(dataset_tbl)
 
 # Diamonds
 ```{r}
-library(tidyverse)
 diamonds2 <- readRDS("../../src/diamonds2.rds")
 diamonds2
 diamonds2_long <- diamonds2 %>% 

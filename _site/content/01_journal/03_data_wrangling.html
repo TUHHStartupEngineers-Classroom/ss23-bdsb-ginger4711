@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.2.335">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
 <meta name="author" content="Christian Sühl">
+
 <title>MyLabJournal - Data Wrangling</title>
 <style>
 code{white-space: pre-wrap;}
@@ -83,6 +86,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
@@ -104,7 +108,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -122,13 +127,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script><link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+}</script>
+
+<link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
 <script src="../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
 </head>
+
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">MyLabJournal</span>
@@ -139,7 +151,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-<li class="nav-item">
+  <li class="nav-item">
     <a class="nav-link" href="../../index.html">
  <span class="menu-text">Home</span></a>
   </li>  
@@ -147,8 +159,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-journal" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Journal</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-journal">
-<li>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-journal">    
+        <li>
     <a class="dropdown-item" href="../../content/01_journal/01_tidyverse.html">
  <span class="dropdown-text">01 Tidyverse</span></a>
   </li>  
@@ -165,7 +177,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <span class="dropdown-text">04 Data Visualization</span></a>
   </li>  
     </ul>
-</li>
+  </li>
   <li class="nav-item">
     <a class="nav-link" href="../../content/02_notes/05_class_notes.html">
  <span class="menu-text">Class notes</span></a>
@@ -175,27 +187,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <span class="menu-text">Links</span></a>
   </li>  
 </ul>
-<div class="quarto-toggle-container">
+              <div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
               </div>
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
-    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
    
   <ul class="collapse">
-<li><a href="#visualization" id="toc-visualization" class="nav-link active" data-scroll-target="#visualization"><span class="toc-section-number">1</span>  Visualization</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link active" data-scroll-target="#visualization"><span class="toc-section-number">1</span>  Visualization</a></li>
   <li><a href="#patent-dominance" id="toc-patent-dominance" class="nav-link" data-scroll-target="#patent-dominance"><span class="toc-section-number">2</span>  Patent Dominance</a></li>
   <li><a href="#recent-patent-activity" id="toc-recent-patent-activity" class="nav-link" data-scroll-target="#recent-patent-activity"><span class="toc-section-number">3</span>  Recent Patent Activity</a></li>
   <li><a href="#innovation-in-tech" id="toc-innovation-in-tech" class="nav-link" data-scroll-target="#innovation-in-tech"><span class="toc-section-number">4</span>  Innovation In Tech</a></li>
-  </ul></nav>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
 <h1 class="title">Data Wrangling</h1>
 </div>
 
@@ -215,7 +235,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
-</header><p>First I tried all the example and the business case as can be seen in <code>DATA_WRANGLING.R</code> and <code>DATA_WRANGLING_BUSINESS_CASE.R</code>.<br>
+</header>
+
+<p>First I tried all the example and the business case as can be seen in <code>DATA_WRANGLING.R</code> and <code>DATA_WRANGLING_BUSINESS_CASE.R</code>.<br>
 Afterwards I started with the challenge using the reduced data set due to hardware limitations.</p>
 <div class="cell" data-hash="03_data_wrangling_cache/html/unnamed-chunk-1_35efc9c1ecae6c37be168efc3233932e">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -282,16 +304,18 @@ For the columns and their types I looked at the contents of the files themselves
 <span id="cb2-37"><a href="#cb2-37"></a>  <span class="at">na         =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"NA"</span>, <span class="st">"NULL"</span>)</span>
 <span id="cb2-38"><a href="#cb2-38"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="visualization" class="level1" data-number="1"><h1 data-number="1">
-<span class="header-section-number">1</span> Visualization</h1>
+<section id="visualization" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Visualization</h1>
 <p>To better understand the interactions and combinations of the different tables I constructed a little visualization.</p>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="../../src/tbls_connections_visualization.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Tables connections visualization"><img src="../../src/tbls_connections_visualization.png" class="img-fluid figure-img"></a></p>
+<figure class="figure">
+<p><a href="../../src/tbls_connections_visualization.png" class="lightbox" title="Tables connections visualization" data-gallery="quarto-lightbox-gallery-1"><img src="../../src/tbls_connections_visualization.png" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Tables connections visualization</figcaption><p></p>
 </figure>
 </div>
-</section><section id="patent-dominance" class="level1" data-number="2"><h1 data-number="2">
-<span class="header-section-number">2</span> Patent Dominance</h1>
+</section>
+<section id="patent-dominance" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Patent Dominance</h1>
 <p>For the patent dominance task I performed the following steps:</p>
 <div class="cell" data-hash="03_data_wrangling_cache/html/unnamed-chunk-3_7c7293dafa2b891761d1240256357693">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Convert patent_assignee_tbl to data.table and group it's entries by assignee_id. Then the number of elements per group is stored in a column patents.</span></span>
@@ -329,8 +353,9 @@ For the columns and their types I looked at the contents of the files themselves
 #&gt; 10:         GM Global Technology Operations LLC    1533</code></pre>
 </div>
 </div>
-</section><section id="recent-patent-activity" class="level1" data-number="3"><h1 data-number="3">
-<span class="header-section-number">3</span> Recent Patent Activity</h1>
+</section>
+<section id="recent-patent-activity" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Recent Patent Activity</h1>
 <p>Similarly I performed a few steps (some similar to patent dominance) to find the top companies by patent activity in august of 2014:</p>
 <div class="cell" data-hash="03_data_wrangling_cache/html/unnamed-chunk-4_fac7f3b10aa601b88bcc4a9c249edcbe">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Take patent_tbl and separate into year, month and day and convert to data.table.</span></span>
@@ -371,8 +396,9 @@ For the columns and their types I looked at the contents of the files themselves
 #&gt; 10:                         LG Electronics Inc.    3     211</code></pre>
 </div>
 </div>
-</section><section id="innovation-in-tech" class="level1" data-number="4"><h1 data-number="4">
-<span class="header-section-number">4</span> Innovation In Tech</h1>
+</section>
+<section id="innovation-in-tech" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Innovation In Tech</h1>
 <p>Similarly I performed a few steps (some similar to patent dominance and recent patent activity) to find the top mainclasses:</p>
 <div class="cell" data-hash="03_data_wrangling_cache/html/unnamed-chunk-5_27ffedb4ab7823f7a2ade4cf239b15a7">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># For most innovative tech sensor group and sum the uspc_tbl by mainclass_id.</span></span>
@@ -417,7 +443,10 @@ For the columns and their types I looked at the contents of the files themselves
 </div>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -666,7 +695,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"loop":true,"selector":".lightbox","descPosition":"bottom","openEffect":"zoom","closeEffect":"zoom"});</script>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","openEffect":"zoom","descPosition":"bottom","loop":true,"selector":".lightbox"});</script>
+
 
 
 </body></html>
