@@ -1,98 +1,240 @@
 ---
 title: "Tidyverse"
-author: "Joschka Schwarz"
+author: "Christian Sühl"
 ---
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
-
-This is a `.qmd` file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a \# in front of your text, it will create a top level-header.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-# Text Formatting
-
-*italics* and **bold**
-
-superscript^2^ / subscript~2~
-
-~~strikethrough~~
-
-`verbatim code`
-
-> Blockquote
-
-# Headings
-
-## Header 2
-### Header 3
-#### Header 4
-##### Header 5
-###### Header 6
-
-# Links & Images
-
-<https://quarto.org>
-
-[Quarto](https://quarto.org)
-
-![Caption](../../assets/img/elephant.png)
-
-[![Caption](../../assets/img/elephant.png)](https://quarto.org)
-
-[![Caption](../../assets/img/elephant.png)](https://quarto.org "An elephant")
-
-
-# Lists
-
-* unordered list
-    + sub-item 1
-    + sub-item 2
-        - sub-sub-item 1
-        
-*   item 2
-
-    Continued (indent 4 spaces)
-    
-    
-1. ordered list
-2. item 2
-    i) sub-item 1
-         A.  sub-sub-item 1
-         
-(@)  A list whose numbering
-
-continues after
-
-(@)  an interruption
-
-# Tables
-
-| Right | Left | Default | Center |
-|------:|:-----|---------|:------:|
-|   12  |  12  |    12   |    12  |
-|  123  |  123 |   123   |   123  |
-|    1  |    1 |     1   |     1  |
-
-# Source Code
-
-Use ``` to delimit blocks of source code:
-
-```
-code
-```
-
-Add a language to syntax highlight code blocks:
+# Intro reading
+| This is the first chapter of my lab journal focusing on the *Tidyverse*.
+| At first i started to read the chapter *Intro to the Tidyverse* and used the `INSTALL_PKGS.R` file to install all the required packages.
+| After reading through the basics like *Pipes*, *Tibbles* and *Import*.
 
 ```{r}
-1 + 1
+#| include: false
+library(tidyverse)
+library(rmarkdown)
+```
+```{r}
+tibble(
+    x = 1:50,
+    y = runif(50), 
+    z = x + y^2,
+    outcome = rnorm(50)
+  )
 ```
 
 ```{r}
-cars
+library(readr)
+dataset_tbl <- read_csv("../../src/test-data.csv",show_col_types = FALSE)
+readr::problems(dataset_tbl)
 ```
 
+# Tidy Exercise
+1. Table 1 is tidy
+2. Table 2 is not tidy, since the name of the variable is stored in every row of the table and not just as a column name with the values in that column.
+3. Table 3 is untidy, since here the variable names are addressing individual rows whereas they should do that with columns. So the table would need to be rotated.
+4. Table 4 is untidy, since multiple variables are stored per column.
+
+# Diamonds
 ```{r}
-plot(cars)
+diamonds2 <- readRDS("../../src/diamonds2.rds")
+diamonds2
+diamonds2_long <- diamonds2 %>% 
+  pivot_longer(cols      = c("2008", "2009"), 
+               names_to  = 'year', 
+               values_to = 'price') %>% 
+  head(n = 5)
+diamonds2_long
+lm(price ~ ., data = diamonds2_long)
+diamonds3 <- readRDS("../../src/diamonds3.rds")
+diamonds3 %>% pivot_wider(names_from = "dimension",values_from = "measurement") %>% head(n=5)
+diamonds4 <- readRDS("../../src/diamonds4.rds")
+diamonds4 %>% separate(col = dim, into = c("x","y","z"),sep = "/", convert = T)
+diamonds5 <- readRDS("../../src/diamonds5.rds")
+diamonds5 %>% unite(clarity,clarity_prefix,clarity_suffix,sep='')
 ```
+
+# Transform
+```{r}
+library(ggplot2) # To load the diamonds dataset
+library(dplyr)
+diamonds %>% 
+    filter(cut == 'Premium', carat >= 0.3) %>% 
+    head(5)
+diamonds %>% 
+  select(x:z, everything()) %>%
+  rename(colorcode = color) %>%
+  head(n = 5)
+diamonds %>%
+  group_by(color) %>%
+  summarize(max_price  = max(price),
+            mean_price = mean(price),
+            min_price  = min(price))
+library(lubridate)
+ymd(19690716)
+```
+
+# Business case
+Tried out all the examples. See SALES_ANALYSIS.R in the src directory for details.
+
+# Challenge
+| Worked pretty well adjusting the existing plots for year and category to location and year.
+| Code is also present in SALES_ANALYSIS.R file.
+
+```{r}
+#| include: false
+
+# 1.0 Load libraries ----
+library(tidyverse)
+library(readxl)
+# 2.0 Importing Files ----
+path_root <- "../../src/ds_data/01_bike_sales/01_raw_data/"
+bikes_tbl      <- read_excel(path = paste(path_root,"bikes.xlsx",sep=""))
+orderlines_tbl <- read_excel(path = paste(path_root,"orderlines.xlsx",sep=""))
+bikeshops_tbl  <- read_excel(path = paste(path_root,"bikeshops.xlsx",sep=""))
+# 3.0 Examining Data ----
+# glimpse(orderlines_tbl)
+# 4.0 Joining Data ----
+bike_orderlines_joined_tbl <- orderlines_tbl %>%
+  left_join(bikes_tbl, by = c("product.id" = "bike.id")) %>%
+  left_join(bikeshops_tbl, by = c("customer.id" = "bikeshop.id"))
+# bike_orderlines_joined_tbl %>% glimpse()
+# 5.0 Wrangling Data ----
+# All actions are chained with the pipe already. You can perform each step separately and use glimpse() or View() to validate your code. Store the result in a variable at the end of the steps.
+bike_orderlines_wrangled_tbl <- bike_orderlines_joined_tbl %>%
+  # 5.1 Separate category name
+  separate(col    = category,
+           into   = c("category.1", "category.2", "category.3"),
+           sep    = " - ") %>%
+  
+  # 5.2 Add the total price (price * quantity) 
+  # Add a column to a tibble that uses a formula-style calculation of other columns
+  mutate(total.price = price * quantity) %>%
+  
+  # 5.3 Optional: Reorganize. Using select to grab or remove unnecessary columns
+  # 5.3.1 by exact column name
+  select(-...1, -gender) %>%
+  
+  # 5.3.2 by a pattern
+  # You can use the select_helpers to define patterns. 
+  # Type ?ends_with and click on Select helpers in the documentation
+  select(-ends_with(".id")) %>%
+  
+  # 5.3.3 Actually we need the column "order.id". Let's bind it back to the data
+  bind_cols(bike_orderlines_joined_tbl %>% select(order.id)) %>% 
+  
+  # 5.3.4 You can reorder the data by selecting the columns in your desired order.
+  # You can use select_helpers like contains() or everything()
+  select(order.id, contains("order"), contains("model"), contains("category"),
+         price, quantity, total.price,
+         everything()) %>%
+  
+  # 5.4 Rename columns because we actually wanted underscores instead of the dots
+  # (one at the time vs. multiple at once)
+  rename(bikeshop = name) %>%
+  set_names(names(.) %>% str_replace_all("\\.", "_"))
+```
+
+```{r plot, fig.width=20, fig.height=20}
+# 6.3 Sales by location
+
+# Step 1 - Manipulate
+sales_by_location_tbl <- bike_orderlines_wrangled_tbl %>%
+  # Seperate city and state into two separate columns
+  separate(col = location,
+           into = c("city","state"),
+           sep = ", ",
+           convert = T) %>%
+  
+  # Select columns
+  select(state, total_price) %>%
+  
+  # Grouping by year and summarizing sales
+  group_by(state) %>% 
+  summarize(sales = sum(total_price)) %>%
+  
+  # Optional: Add a column that turns the numbers into a currency format 
+  # (makes it in the plot optically more appealing)
+  # mutate(sales_text = scales::dollar(sales)) <- Works for dollar values
+  mutate(sales_text = scales::dollar(sales, big.mark = ".", 
+                                     decimal.mark = ",", 
+                                     prefix = "", 
+                                     suffix = " €"))
+ 
+# Step 2 - Visualize
+sales_by_location_tbl %>%
+  
+  # Setup canvas with the columns year (x-axis) and sales (y-axis)
+  ggplot(aes(x = state, y = sales)) +
+  
+  # Geometries
+  geom_col(fill = "#2DC6D6") + # Use geom_col for a bar plot
+  geom_label(aes(label = sales_text)) + # Adding labels to the bars
+  geom_smooth(method = "lm", se = FALSE) + # Adding a trendline
+  
+  # Formatting
+  # scale_y_continuous(labels = scales::dollar) + # Change the y-axis. 
+  # Again, we have to adjust it for euro values
+  scale_y_continuous(labels = scales::dollar_format(big.mark = ".", 
+                                                    decimal.mark = ",", 
+                                                    prefix = "", 
+                                                    suffix = " €")) +
+  labs(
+    title    = "Revenue by location",
+    subtitle = "Upward Trend",
+    x = "", # Override defaults for x and y
+    y = "Revenue"
+  ) +
+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 6.4 Sales by location and year
+# Step 1 - Manipulate
+sales_by_location_and_year_tbl <- bike_orderlines_wrangled_tbl %>%
+  # Seperate city and state into two separate columns
+  separate(col = location,
+           into = c("city","state"),
+           sep = ", ",
+           convert = T) %>%
+  
+  # Select columns and add a year
+  select(state, total_price, order_date) %>%
+  mutate(year = year(order_date)) %>%
+  
+  # Group by and summarize year and main catgegory
+  group_by(state, year) %>%
+  summarise(sales = sum(total_price)) %>%
+  ungroup() %>%
+  
+  # Format $ Text
+  mutate(sales_text = scales::dollar(sales, big.mark = ".", 
+                                     decimal.mark = ",", 
+                                     prefix = "", 
+                                     suffix = " €"))
+
+# Step 2 - Visualize
+sales_by_location_and_year_tbl %>%
+  
+  # Set up x, y, fill
+  ggplot(aes(x = year, y = sales, fill = year)) +
+  
+  # Geometries
+  geom_col() + # Run up to here to get a stacked bar plot
+  
+  # Facet
+  facet_wrap(~ state) +
+  
+  # Formatting
+  scale_y_continuous(labels = scales::dollar_format(big.mark = ".", 
+                                                    decimal.mark = ",", 
+                                                    prefix = "", 
+                                                    suffix = " €")) +
+  labs(
+    title = "Revenue by location and year",
+    subtitle = "Each year has an upward trend",
+    fill = "Year" # Changes the legend name
+  ) +
+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+

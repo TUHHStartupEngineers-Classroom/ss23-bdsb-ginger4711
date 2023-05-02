@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Christian Sühl">
+<title>MyLabJournal - Tidyverse</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/icons/favicon.svg" rel="icon" type="image/svg+xml">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script><link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+</head>
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">MyLabJournal</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link" href="../../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-journal" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Journal</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-journal">
+<li>
+    <a class="dropdown-item" href="../../content/01_journal/01_tidyverse.html">
+ <span class="dropdown-text">01 Tidyverse</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/02_data_acquisition.html">
+ <span class="dropdown-text">02 Data Acquisition</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/03_data_wrangling.html">
+ <span class="dropdown-text">03 Data Wrangling</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/04_data_visualization.html">
+ <span class="dropdown-text">04 Data Visualization</span></a>
+  </li>  
+    </ul>
+</li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../content/02_notes/05_class_notes.html">
+ <span class="menu-text">Class notes</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../content/03_other/06_links.html">
+ <span class="menu-text">Links</span></a>
+  </li>  
+</ul>
+<div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+<li><a href="#intro-reading" id="toc-intro-reading" class="nav-link active" data-scroll-target="#intro-reading"><span class="toc-section-number">1</span>  Intro reading</a></li>
+  <li><a href="#tidy-exercise" id="toc-tidy-exercise" class="nav-link" data-scroll-target="#tidy-exercise"><span class="toc-section-number">2</span>  Tidy Exercise</a></li>
+  <li><a href="#diamonds" id="toc-diamonds" class="nav-link" data-scroll-target="#diamonds"><span class="toc-section-number">3</span>  Diamonds</a></li>
+  <li><a href="#transform" id="toc-transform" class="nav-link" data-scroll-target="#transform"><span class="toc-section-number">4</span>  Transform</a></li>
+  <li><a href="#business-case" id="toc-business-case" class="nav-link" data-scroll-target="#business-case"><span class="toc-section-number">5</span>  Business case</a></li>
+  <li><a href="#challenge" id="toc-challenge" class="nav-link" data-scroll-target="#challenge"><span class="toc-section-number">6</span>  Challenge</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">Tidyverse</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Christian Sühl </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header><section id="intro-reading" class="level1" data-number="1"><h1 data-number="1">
+<span class="header-section-number">1</span> Intro reading</h1>
+<p>This is the first chapter of my lab journal focusing on the <em>Tidyverse</em>.<br>
+At first i started to read the chapter <em>Intro to the Tidyverse</em> and used the <code>INSTALL_PKGS.R</code> file to install all the required packages.<br>
+After reading through the basics like <em>Pipes</em>, <em>Tibbles</em> and <em>Import</em>.</p>
+<div class="cell" data-hash="01_tidyverse_cache/html/unnamed-chunk-2_fcf6625521baccf63183a0ee62cfce87">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>,</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">50</span>), </span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="at">z =</span> x <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="at">outcome =</span> <span class="fu">rnorm</span>(<span class="dv">50</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["x"],"name":[1],"type":["int"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["z"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["outcome"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"0.581867740","3":"1.338570","4":"0.006394022"},{"1":"2","2":"0.689033649","3":"2.474767","4":"1.480380862"},{"1":"3","2":"0.838718151","3":"3.703448","4":"-0.373514210"},{"1":"4","2":"0.635994180","3":"4.404489","4":"-1.301917807"},{"1":"5","2":"0.789752700","3":"5.623709","4":"-1.248030787"},{"1":"6","2":"0.585919696","3":"6.343302","4":"-0.135028004"},{"1":"7","2":"0.410729198","3":"7.168698","4":"-2.495085172"},{"1":"8","2":"0.326278342","3":"8.106458","4":"-0.707134403"},{"1":"9","2":"0.008385042","3":"9.000070","4":"-0.699819635"},{"1":"10","2":"0.173512412","3":"10.030107","4":"-0.446601814"},{"1":"11","2":"0.264603462","3":"11.070015","4":"-1.469779238"},{"1":"12","2":"0.921197871","3":"12.848606","4":"0.844086470"},{"1":"13","2":"0.441197668","3":"13.194655","4":"-0.196310911"},{"1":"14","2":"0.019976418","3":"14.000399","4":"0.220527977"},{"1":"15","2":"0.502456981","3":"15.252463","4":"1.160251916"},{"1":"16","2":"0.522329208","3":"16.272828","4":"0.879851170"},{"1":"17","2":"0.869912869","3":"17.756748","4":"-0.197702897"},{"1":"18","2":"0.352837565","3":"18.124494","4":"-0.342032734"},{"1":"19","2":"0.367014344","3":"19.134700","4":"0.834418272"},{"1":"20","2":"0.840063011","3":"20.705706","4":"0.429138079"},{"1":"21","2":"0.386539142","3":"21.149413","4":"2.453274454"},{"1":"22","2":"0.166596629","3":"22.027754","4":"1.355634820"},{"1":"23","2":"0.031308447","3":"23.000980","4":"1.008105605"},{"1":"24","2":"0.455585439","3":"24.207558","4":"-0.228353274"},{"1":"25","2":"0.922975688","3":"25.851884","4":"-1.062328707"},{"1":"26","2":"0.463090385","3":"26.214453","4":"0.670560142"},{"1":"27","2":"0.984034267","3":"27.968323","4":"0.414949875"},{"1":"28","2":"0.836715826","3":"28.700093","4":"-1.977837271"},{"1":"29","2":"0.830912866","3":"29.690416","4":"-0.865910492"},{"1":"30","2":"0.089369709","3":"30.007987","4":"1.155088480"},{"1":"31","2":"0.166060724","3":"31.027576","4":"0.739217616"},{"1":"32","2":"0.842350907","3":"32.709555","4":"-0.730563717"},{"1":"33","2":"0.670688031","3":"33.449822","4":"-1.291147437"},{"1":"34","2":"0.953258124","3":"34.908701","4":"0.175644997"},{"1":"35","2":"0.197101039","3":"35.038849","4":"-1.143205983"},{"1":"36","2":"0.133395453","3":"36.017794","4":"1.247689483"},{"1":"37","2":"0.359887813","3":"37.129519","4":"-1.162317459"},{"1":"38","2":"0.503604545","3":"38.253618","4":"2.141087120"},{"1":"39","2":"0.114915362","3":"39.013206","4":"-0.662192192"},{"1":"40","2":"0.499233359","3":"40.249234","4":"1.572570912"},{"1":"41","2":"0.934965965","3":"41.874161","4":"1.862046144"},{"1":"42","2":"0.342855869","3":"42.117550","4":"0.756037730"},{"1":"43","2":"0.667057222","3":"43.444965","4":"-0.726570780"},{"1":"44","2":"0.883002246","3":"44.779693","4":"-0.048931796"},{"1":"45","2":"0.833820759","3":"45.695257","4":"-1.014923889"},{"1":"46","2":"0.790447893","3":"46.624808","4":"1.693981697"},{"1":"47","2":"0.489639736","3":"47.239747","4":"-0.125986563"},{"1":"48","2":"0.391914833","3":"48.153597","4":"0.214351740"},{"1":"49","2":"0.787023596","3":"49.619406","4":"0.417793990"},{"1":"50","2":"0.900411717","3":"50.810741","4":"0.718809265"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div class="cell" data-hash="01_tidyverse_cache/html/unnamed-chunk-3_232a877aad6dff52cdef16256629585c">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>dataset_tbl <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../../src/test-data.csv"</span>,<span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>readr<span class="sc">::</span><span class="fu">problems</span>(dataset_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["row"],"name":[1],"type":["int"],"align":["right"]},{"label":["col"],"name":[2],"type":["int"],"align":["right"]},{"label":["expected"],"name":[3],"type":["chr"],"align":["left"]},{"label":["actual"],"name":[4],"type":["chr"],"align":["left"]},{"label":["file"],"name":[5],"type":["chr"],"align":["left"]}],"data":[],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section><section id="tidy-exercise" class="level1" data-number="2"><h1 data-number="2">
+<span class="header-section-number">2</span> Tidy Exercise</h1>
+<ol type="1">
+<li>Table 1 is tidy</li>
+<li>Table 2 is not tidy, since the name of the variable is stored in every row of the table and not just as a column name with the values in that column.</li>
+<li>Table 3 is untidy, since here the variable names are addressing individual rows whereas they should do that with columns. So the table would need to be rotated.</li>
+<li>Table 4 is untidy, since multiple variables are stored per column.</li>
+</ol></section><section id="diamonds" class="level1" data-number="3"><h1 data-number="3">
+<span class="header-section-number">3</span> Diamonds</h1>
+<div class="cell" data-hash="01_tidyverse_cache/html/unnamed-chunk-4_f7cd7423bb33e37caf0e6207a05b9b2b">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>diamonds2 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../src/diamonds2.rds"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>diamonds2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["cut"],"name":[1],"type":["chr"],"align":["left"]},{"label":["2008"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["2009"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"Ideal","2":"326","3":"332"},{"1":"Premium","2":"326","3":"332"},{"1":"Good","2":"237","3":"333"},{"1":"Premium","2":"334","3":"340"},{"1":"Good","2":"335","3":"341"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>diamonds2_long <span class="ot">&lt;-</span> diamonds2 <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> <span class="fu">c</span>(<span class="st">"2008"</span>, <span class="st">"2009"</span>), </span>
+<span id="cb4-3"><a href="#cb4-3"></a>               <span class="at">names_to  =</span> <span class="st">'year'</span>, </span>
+<span id="cb4-4"><a href="#cb4-4"></a>               <span class="at">values_to =</span> <span class="st">'price'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span>
+<span id="cb4-6"><a href="#cb4-6"></a>diamonds2_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["cut"],"name":[1],"type":["chr"],"align":["left"]},{"label":["year"],"name":[2],"type":["chr"],"align":["left"]},{"label":["price"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"Ideal","2":"2008","3":"326"},{"1":"Ideal","2":"2009","3":"332"},{"1":"Premium","2":"2008","3":"326"},{"1":"Premium","2":"2009","3":"332"},{"1":"Good","2":"2008","3":"237"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">lm</span>(price <span class="sc">~</span> ., <span class="at">data =</span> diamonds2_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; lm(formula = price ~ ., data = diamonds2_long)
+#&gt; 
+#&gt; Coefficients:
+#&gt; (Intercept)     cutIdeal   cutPremium     year2009  
+#&gt;         237           89           89            6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>diamonds3 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../src/diamonds3.rds"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>diamonds3 <span class="sc">%&gt;%</span> <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"dimension"</span>,<span class="at">values_from =</span> <span class="st">"measurement"</span>) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="at">n=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["cut"],"name":[1],"type":["ord"],"align":["right"]},{"label":["price"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["clarity"],"name":[3],"type":["ord"],"align":["right"]},{"label":["x"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["z"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"Ideal","2":"326","3":"SI2","4":"3.95","5":"3.98","6":"2.43"},{"1":"Premium","2":"326","3":"SI1","4":"3.89","5":"3.84","6":"2.31"},{"1":"Good","2":"327","3":"VS1","4":"4.05","5":"4.07","6":"2.31"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>diamonds4 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../src/diamonds4.rds"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>diamonds4 <span class="sc">%&gt;%</span> <span class="fu">separate</span>(<span class="at">col =</span> dim, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"y"</span>,<span class="st">"z"</span>),<span class="at">sep =</span> <span class="st">"/"</span>, <span class="at">convert =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["cut"],"name":[1],"type":["ord"],"align":["right"]},{"label":["price"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["clarity"],"name":[3],"type":["ord"],"align":["right"]},{"label":["x"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["z"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"Ideal","2":"326","3":"SI2","4":"3.95","5":"3.98","6":"2.43"},{"1":"Premium","2":"326","3":"SI1","4":"3.89","5":"3.84","6":"2.31"},{"1":"Good","2":"327","3":"VS1","4":"4.05","5":"4.07","6":"2.31"},{"1":"Premium","2":"334","3":"VS2","4":"4.20","5":"4.23","6":"2.63"},{"1":"Good","2":"335","3":"SI2","4":"4.34","5":"4.35","6":"2.75"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>diamonds5 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../src/diamonds5.rds"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>diamonds5 <span class="sc">%&gt;%</span> <span class="fu">unite</span>(clarity,clarity_prefix,clarity_suffix,<span class="at">sep=</span><span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["cut"],"name":[1],"type":["ord"],"align":["right"]},{"label":["price"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["clarity"],"name":[3],"type":["chr"],"align":["left"]},{"label":["x"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["z"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"Ideal","2":"326","3":"SI2","4":"3.95","5":"3.98","6":"2.43"},{"1":"Premium","2":"326","3":"SI1","4":"3.89","5":"3.84","6":"2.31"},{"1":"Good","2":"327","3":"VS1","4":"4.05","5":"4.07","6":"2.31"},{"1":"Premium","2":"334","3":"VS2","4":"4.20","5":"4.23","6":"2.63"},{"1":"Good","2":"335","3":"SI2","4":"4.34","5":"4.35","6":"2.75"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section><section id="transform" class="level1" data-number="4"><h1 data-number="4">
+<span class="header-section-number">4</span> Transform</h1>
+<div class="cell" data-hash="01_tidyverse_cache/html/unnamed-chunk-5_67e14a41bd91a9d9307bb20ae6ee09e7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># To load the diamonds dataset</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb10-3"><a href="#cb10-3"></a>diamonds <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="#cb10-4"></a>    <span class="fu">filter</span>(cut <span class="sc">==</span> <span class="st">'Premium'</span>, carat <span class="sc">&gt;=</span> <span class="fl">0.3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-5"><a href="#cb10-5"></a>    <span class="fu">head</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["carat"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["cut"],"name":[2],"type":["ord"],"align":["right"]},{"label":["color"],"name":[3],"type":["ord"],"align":["right"]},{"label":["clarity"],"name":[4],"type":["ord"],"align":["right"]},{"label":["depth"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["table"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["price"],"name":[7],"type":["int"],"align":["right"]},{"label":["x"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["z"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.32","2":"Premium","3":"E","4":"I1","5":"60.9","6":"58","7":"345","8":"4.38","9":"4.42","10":"2.68"},{"1":"0.30","2":"Premium","3":"J","4":"SI2","5":"59.3","6":"61","7":"405","8":"4.43","9":"4.38","10":"2.61"},{"1":"0.30","2":"Premium","3":"D","4":"SI1","5":"62.6","6":"59","7":"552","8":"4.23","9":"4.27","10":"2.66"},{"1":"0.42","2":"Premium","3":"I","4":"SI2","5":"61.5","6":"59","7":"552","8":"4.78","9":"4.84","10":"2.96"},{"1":"0.31","2":"Premium","3":"G","4":"SI1","5":"61.8","6":"58","7":"553","8":"4.35","9":"4.32","10":"2.68"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>diamonds <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">select</span>(x<span class="sc">:</span>z, <span class="fu">everything</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">rename</span>(<span class="at">colorcode =</span> color) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["z"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["carat"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["cut"],"name":[5],"type":["ord"],"align":["right"]},{"label":["colorcode"],"name":[6],"type":["ord"],"align":["right"]},{"label":["clarity"],"name":[7],"type":["ord"],"align":["right"]},{"label":["depth"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["table"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["price"],"name":[10],"type":["int"],"align":["right"]}],"data":[{"1":"3.95","2":"3.98","3":"2.43","4":"0.23","5":"Ideal","6":"E","7":"SI2","8":"61.5","9":"55","10":"326"},{"1":"3.89","2":"3.84","3":"2.31","4":"0.21","5":"Premium","6":"E","7":"SI1","8":"59.8","9":"61","10":"326"},{"1":"4.05","2":"4.07","3":"2.31","4":"0.23","5":"Good","6":"E","7":"VS1","8":"56.9","9":"65","10":"327"},{"1":"4.20","2":"4.23","3":"2.63","4":"0.29","5":"Premium","6":"I","7":"VS2","8":"62.4","9":"58","10":"334"},{"1":"4.34","2":"4.35","3":"2.75","4":"0.31","5":"Good","6":"J","7":"SI2","8":"63.3","9":"58","10":"335"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>diamonds <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">group_by</span>(color) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">summarize</span>(<span class="at">max_price  =</span> <span class="fu">max</span>(price),</span>
+<span id="cb12-4"><a href="#cb12-4"></a>            <span class="at">mean_price =</span> <span class="fu">mean</span>(price),</span>
+<span id="cb12-5"><a href="#cb12-5"></a>            <span class="at">min_price  =</span> <span class="fu">min</span>(price))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["color"],"name":[1],"type":["ord"],"align":["right"]},{"label":["max_price"],"name":[2],"type":["int"],"align":["right"]},{"label":["mean_price"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["min_price"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"D","2":"18693","3":"3169.954","4":"357"},{"1":"E","2":"18731","3":"3076.752","4":"326"},{"1":"F","2":"18791","3":"3724.886","4":"342"},{"1":"G","2":"18818","3":"3999.136","4":"354"},{"1":"H","2":"18803","3":"4486.669","4":"337"},{"1":"I","2":"18823","3":"5091.875","4":"334"},{"1":"J","2":"18710","3":"5323.818","4":"335"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">ymd</span>(<span class="dv">19690716</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] "1969-07-16"</code></pre>
+</div>
+</div>
+</section><section id="business-case" class="level1" data-number="5"><h1 data-number="5">
+<span class="header-section-number">5</span> Business case</h1>
+<p>Tried out all the examples. See SALES_ANALYSIS.R in the src directory for details.</p>
+</section><section id="challenge" class="level1" data-number="6"><h1 data-number="6">
+<span class="header-section-number">6</span> Challenge</h1>
+<p>Worked pretty well adjusting the existing plots for year and category to location and year.<br>
+Code is also present in SALES_ANALYSIS.R file.</p>
+<div class="cell" data-hash="01_tidyverse_cache/html/plot_d1212a7bb51b78c9dad6ab5b230ae481">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># 6.3 Sales by location</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="co"># Step 1 - Manipulate</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>sales_by_location_tbl <span class="ot">&lt;-</span> bike_orderlines_wrangled_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>  <span class="co"># Seperate city and state into two separate columns</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a>  <span class="fu">separate</span>(<span class="at">col =</span> location,</span>
+<span id="cb15-7"><a href="#cb15-7"></a>           <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"city"</span>,<span class="st">"state"</span>),</span>
+<span id="cb15-8"><a href="#cb15-8"></a>           <span class="at">sep =</span> <span class="st">", "</span>,</span>
+<span id="cb15-9"><a href="#cb15-9"></a>           <span class="at">convert =</span> T) <span class="sc">%&gt;%</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a>  </span>
+<span id="cb15-11"><a href="#cb15-11"></a>  <span class="co"># Select columns</span></span>
+<span id="cb15-12"><a href="#cb15-12"></a>  <span class="fu">select</span>(state, total_price) <span class="sc">%&gt;%</span></span>
+<span id="cb15-13"><a href="#cb15-13"></a>  </span>
+<span id="cb15-14"><a href="#cb15-14"></a>  <span class="co"># Grouping by year and summarizing sales</span></span>
+<span id="cb15-15"><a href="#cb15-15"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-16"><a href="#cb15-16"></a>  <span class="fu">summarize</span>(<span class="at">sales =</span> <span class="fu">sum</span>(total_price)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-17"><a href="#cb15-17"></a>  </span>
+<span id="cb15-18"><a href="#cb15-18"></a>  <span class="co"># Optional: Add a column that turns the numbers into a currency format </span></span>
+<span id="cb15-19"><a href="#cb15-19"></a>  <span class="co"># (makes it in the plot optically more appealing)</span></span>
+<span id="cb15-20"><a href="#cb15-20"></a>  <span class="co"># mutate(sales_text = scales::dollar(sales)) &lt;- Works for dollar values</span></span>
+<span id="cb15-21"><a href="#cb15-21"></a>  <span class="fu">mutate</span>(<span class="at">sales_text =</span> scales<span class="sc">::</span><span class="fu">dollar</span>(sales, <span class="at">big.mark =</span> <span class="st">"."</span>, </span>
+<span id="cb15-22"><a href="#cb15-22"></a>                                     <span class="at">decimal.mark =</span> <span class="st">","</span>, </span>
+<span id="cb15-23"><a href="#cb15-23"></a>                                     <span class="at">prefix =</span> <span class="st">""</span>, </span>
+<span id="cb15-24"><a href="#cb15-24"></a>                                     <span class="at">suffix =</span> <span class="st">" €"</span>))</span>
+<span id="cb15-25"><a href="#cb15-25"></a> </span>
+<span id="cb15-26"><a href="#cb15-26"></a><span class="co"># Step 2 - Visualize</span></span>
+<span id="cb15-27"><a href="#cb15-27"></a>sales_by_location_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb15-28"><a href="#cb15-28"></a>  </span>
+<span id="cb15-29"><a href="#cb15-29"></a>  <span class="co"># Setup canvas with the columns year (x-axis) and sales (y-axis)</span></span>
+<span id="cb15-30"><a href="#cb15-30"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> state, <span class="at">y =</span> sales)) <span class="sc">+</span></span>
+<span id="cb15-31"><a href="#cb15-31"></a>  </span>
+<span id="cb15-32"><a href="#cb15-32"></a>  <span class="co"># Geometries</span></span>
+<span id="cb15-33"><a href="#cb15-33"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"#2DC6D6"</span>) <span class="sc">+</span> <span class="co"># Use geom_col for a bar plot</span></span>
+<span id="cb15-34"><a href="#cb15-34"></a>  <span class="fu">geom_label</span>(<span class="fu">aes</span>(<span class="at">label =</span> sales_text)) <span class="sc">+</span> <span class="co"># Adding labels to the bars</span></span>
+<span id="cb15-35"><a href="#cb15-35"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> <span class="co"># Adding a trendline</span></span>
+<span id="cb15-36"><a href="#cb15-36"></a>  </span>
+<span id="cb15-37"><a href="#cb15-37"></a>  <span class="co"># Formatting</span></span>
+<span id="cb15-38"><a href="#cb15-38"></a>  <span class="co"># scale_y_continuous(labels = scales::dollar) + # Change the y-axis. </span></span>
+<span id="cb15-39"><a href="#cb15-39"></a>  <span class="co"># Again, we have to adjust it for euro values</span></span>
+<span id="cb15-40"><a href="#cb15-40"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">dollar_format</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, </span>
+<span id="cb15-41"><a href="#cb15-41"></a>                                                    <span class="at">decimal.mark =</span> <span class="st">","</span>, </span>
+<span id="cb15-42"><a href="#cb15-42"></a>                                                    <span class="at">prefix =</span> <span class="st">""</span>, </span>
+<span id="cb15-43"><a href="#cb15-43"></a>                                                    <span class="at">suffix =</span> <span class="st">" €"</span>)) <span class="sc">+</span></span>
+<span id="cb15-44"><a href="#cb15-44"></a>  <span class="fu">labs</span>(</span>
+<span id="cb15-45"><a href="#cb15-45"></a>    <span class="at">title    =</span> <span class="st">"Revenue by location"</span>,</span>
+<span id="cb15-46"><a href="#cb15-46"></a>    <span class="at">subtitle =</span> <span class="st">"Upward Trend"</span>,</span>
+<span id="cb15-47"><a href="#cb15-47"></a>    <span class="at">x =</span> <span class="st">""</span>, <span class="co"># Override defaults for x and y</span></span>
+<span id="cb15-48"><a href="#cb15-48"></a>    <span class="at">y =</span> <span class="st">"Revenue"</span></span>
+<span id="cb15-49"><a href="#cb15-49"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-50"><a href="#cb15-50"></a></span>
+<span id="cb15-51"><a href="#cb15-51"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; `geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><a href="01_tidyverse_files/figure-html/plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="01_tidyverse_files/figure-html/plot-1.png" class="img-fluid figure-img" width="1920"></a></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># 6.4 Sales by location and year</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="co"># Step 1 - Manipulate</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>sales_by_location_and_year_tbl <span class="ot">&lt;-</span> bike_orderlines_wrangled_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="co"># Seperate city and state into two separate columns</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">separate</span>(<span class="at">col =</span> location,</span>
+<span id="cb17-6"><a href="#cb17-6"></a>           <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"city"</span>,<span class="st">"state"</span>),</span>
+<span id="cb17-7"><a href="#cb17-7"></a>           <span class="at">sep =</span> <span class="st">", "</span>,</span>
+<span id="cb17-8"><a href="#cb17-8"></a>           <span class="at">convert =</span> T) <span class="sc">%&gt;%</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a>  </span>
+<span id="cb17-10"><a href="#cb17-10"></a>  <span class="co"># Select columns and add a year</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a>  <span class="fu">select</span>(state, total_price, order_date) <span class="sc">%&gt;%</span></span>
+<span id="cb17-12"><a href="#cb17-12"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">year</span>(order_date)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-13"><a href="#cb17-13"></a>  </span>
+<span id="cb17-14"><a href="#cb17-14"></a>  <span class="co"># Group by and summarize year and main catgegory</span></span>
+<span id="cb17-15"><a href="#cb17-15"></a>  <span class="fu">group_by</span>(state, year) <span class="sc">%&gt;%</span></span>
+<span id="cb17-16"><a href="#cb17-16"></a>  <span class="fu">summarise</span>(<span class="at">sales =</span> <span class="fu">sum</span>(total_price)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-17"><a href="#cb17-17"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb17-18"><a href="#cb17-18"></a>  </span>
+<span id="cb17-19"><a href="#cb17-19"></a>  <span class="co"># Format $ Text</span></span>
+<span id="cb17-20"><a href="#cb17-20"></a>  <span class="fu">mutate</span>(<span class="at">sales_text =</span> scales<span class="sc">::</span><span class="fu">dollar</span>(sales, <span class="at">big.mark =</span> <span class="st">"."</span>, </span>
+<span id="cb17-21"><a href="#cb17-21"></a>                                     <span class="at">decimal.mark =</span> <span class="st">","</span>, </span>
+<span id="cb17-22"><a href="#cb17-22"></a>                                     <span class="at">prefix =</span> <span class="st">""</span>, </span>
+<span id="cb17-23"><a href="#cb17-23"></a>                                     <span class="at">suffix =</span> <span class="st">" €"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; `summarise()` has grouped output by 'state'. You can override using the
+#&gt; `.groups` argument.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># Step 2 - Visualize</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>sales_by_location_and_year_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a>  </span>
+<span id="cb19-4"><a href="#cb19-4"></a>  <span class="co"># Set up x, y, fill</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> sales, <span class="at">fill =</span> year)) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a>  </span>
+<span id="cb19-7"><a href="#cb19-7"></a>  <span class="co"># Geometries</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="co"># Run up to here to get a stacked bar plot</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a>  </span>
+<span id="cb19-10"><a href="#cb19-10"></a>  <span class="co"># Facet</span></span>
+<span id="cb19-11"><a href="#cb19-11"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> state) <span class="sc">+</span></span>
+<span id="cb19-12"><a href="#cb19-12"></a>  </span>
+<span id="cb19-13"><a href="#cb19-13"></a>  <span class="co"># Formatting</span></span>
+<span id="cb19-14"><a href="#cb19-14"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">dollar_format</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, </span>
+<span id="cb19-15"><a href="#cb19-15"></a>                                                    <span class="at">decimal.mark =</span> <span class="st">","</span>, </span>
+<span id="cb19-16"><a href="#cb19-16"></a>                                                    <span class="at">prefix =</span> <span class="st">""</span>, </span>
+<span id="cb19-17"><a href="#cb19-17"></a>                                                    <span class="at">suffix =</span> <span class="st">" €"</span>)) <span class="sc">+</span></span>
+<span id="cb19-18"><a href="#cb19-18"></a>  <span class="fu">labs</span>(</span>
+<span id="cb19-19"><a href="#cb19-19"></a>    <span class="at">title =</span> <span class="st">"Revenue by location and year"</span>,</span>
+<span id="cb19-20"><a href="#cb19-20"></a>    <span class="at">subtitle =</span> <span class="st">"Each year has an upward trend"</span>,</span>
+<span id="cb19-21"><a href="#cb19-21"></a>    <span class="at">fill =</span> <span class="st">"Year"</span> <span class="co"># Changes the legend name</span></span>
+<span id="cb19-22"><a href="#cb19-22"></a>  ) <span class="sc">+</span></span>
+<span id="cb19-23"><a href="#cb19-23"></a></span>
+<span id="cb19-24"><a href="#cb19-24"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><a href="01_tidyverse_files/figure-html/plot-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="01_tidyverse_files/figure-html/plot-2.png" class="img-fluid figure-img" width="1920"></a></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'alternate';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","closeEffect":"zoom","loop":true,"descPosition":"bottom"});</script>
+
+
+</body></html>
