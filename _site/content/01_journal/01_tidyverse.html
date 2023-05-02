@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.2.335">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
 <meta name="author" content="Christian Sühl">
-
 <title>MyLabJournal - Tidyverse</title>
 <style>
 code{white-space: pre-wrap;}
@@ -86,7 +83,6 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
@@ -108,8 +104,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
-<script id="quarto-search-options" type="application/json">{
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -127,20 +122,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script>
-
-<link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+}</script><link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
 <script src="../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
-
-
 </head>
-
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
-      <div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">MyLabJournal</span>
@@ -151,7 +139,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
+<li class="nav-item">
     <a class="nav-link" href="../../index.html">
  <span class="menu-text">Home</span></a>
   </li>  
@@ -159,8 +147,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-journal" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Journal</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-journal">    
-        <li>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-journal">
+<li>
     <a class="dropdown-item" href="../../content/01_journal/01_tidyverse.html">
  <span class="dropdown-text">01 Tidyverse</span></a>
   </li>  
@@ -177,7 +165,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <span class="dropdown-text">04 Data Visualization</span></a>
   </li>  
     </ul>
-  </li>
+</li>
   <li class="nav-item">
     <a class="nav-link" href="../../content/02_notes/05_class_notes.html">
  <span class="menu-text">Class notes</span></a>
@@ -187,37 +175,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <span class="menu-text">Links</span></a>
   </li>  
 </ul>
-              <div class="quarto-toggle-container">
+<div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
               </div>
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
-    </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Contents</h2>
    
   <ul class="collapse">
-  <li><a href="#intro-reading" id="toc-intro-reading" class="nav-link active" data-scroll-target="#intro-reading"><span class="toc-section-number">1</span>  Intro reading</a></li>
+<li><a href="#intro-reading" id="toc-intro-reading" class="nav-link active" data-scroll-target="#intro-reading"><span class="toc-section-number">1</span>  Intro reading</a></li>
   <li><a href="#tidy-exercise" id="toc-tidy-exercise" class="nav-link" data-scroll-target="#tidy-exercise"><span class="toc-section-number">2</span>  Tidy Exercise</a></li>
   <li><a href="#diamonds" id="toc-diamonds" class="nav-link" data-scroll-target="#diamonds"><span class="toc-section-number">3</span>  Diamonds</a></li>
   <li><a href="#transform" id="toc-transform" class="nav-link" data-scroll-target="#transform"><span class="toc-section-number">4</span>  Transform</a></li>
   <li><a href="#business-case" id="toc-business-case" class="nav-link" data-scroll-target="#business-case"><span class="toc-section-number">5</span>  Business case</a></li>
   <li><a href="#challenge" id="toc-challenge" class="nav-link" data-scroll-target="#challenge"><span class="toc-section-number">6</span>  Challenge</a></li>
-  </ul>
-</nav>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title">Tidyverse</h1>
 </div>
 
@@ -237,10 +217,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
-</header>
-
-<section id="intro-reading" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Intro reading</h1>
+</header><section id="intro-reading" class="level1" data-number="1"><h1 data-number="1">
+<span class="header-section-number">1</span> Intro reading</h1>
 <p>This is the first chapter of my lab journal focusing on the <em>Tidyverse</em>.<br>
 At first i started to read the chapter <em>Intro to the Tidyverse</em> and used the <code>INSTALL_PKGS.R</code> file to install all the required packages.<br>
 After reading through the basics like <em>Pipes</em>, <em>Tibbles</em> and <em>Import</em>.</p>
@@ -273,18 +251,15 @@ After reading through the basics like <em>Pipes</em>, <em>Tibbles</em> and <em>I
 </div>
 </div>
 </div>
-</section>
-<section id="tidy-exercise" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Tidy Exercise</h1>
+</section><section id="tidy-exercise" class="level1" data-number="2"><h1 data-number="2">
+<span class="header-section-number">2</span> Tidy Exercise</h1>
 <ol type="1">
 <li>Table 1 is tidy</li>
 <li>Table 2 is not tidy, since the name of the variable is stored in every row of the table and not just as a column name with the values in that column.</li>
 <li>Table 3 is untidy, since here the variable names are addressing individual rows whereas they should do that with columns. So the table would need to be rotated.</li>
 <li>Table 4 is untidy, since multiple variables are stored per column.</li>
-</ol>
-</section>
-<section id="diamonds" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Diamonds</h1>
+</ol></section><section id="diamonds" class="level1" data-number="3"><h1 data-number="3">
+<span class="header-section-number">3</span> Diamonds</h1>
 <div class="cell" data-hash="01_tidyverse_cache/html/unnamed-chunk-4_f7cd7423bb33e37caf0e6207a05b9b2b">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>diamonds2 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../src/diamonds2.rds"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2"></a>diamonds2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -351,9 +326,8 @@ After reading through the basics like <em>Pipes</em>, <em>Tibbles</em> and <em>I
 </div>
 </div>
 </div>
-</section>
-<section id="transform" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Transform</h1>
+</section><section id="transform" class="level1" data-number="4"><h1 data-number="4">
+<span class="header-section-number">4</span> Transform</h1>
 <div class="cell" data-hash="01_tidyverse_cache/html/unnamed-chunk-5_67e14a41bd91a9d9307bb20ae6ee09e7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># To load the diamonds dataset</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a><span class="fu">library</span>(dplyr)</span>
@@ -399,13 +373,11 @@ After reading through the basics like <em>Pipes</em>, <em>Tibbles</em> and <em>I
 <pre><code>#&gt; [1] "1969-07-16"</code></pre>
 </div>
 </div>
-</section>
-<section id="business-case" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Business case</h1>
+</section><section id="business-case" class="level1" data-number="5"><h1 data-number="5">
+<span class="header-section-number">5</span> Business case</h1>
 <p>Tried out all the examples. See SALES_ANALYSIS.R in the src directory for details.</p>
-</section>
-<section id="challenge" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Challenge</h1>
+</section><section id="challenge" class="level1" data-number="6"><h1 data-number="6">
+<span class="header-section-number">6</span> Challenge</h1>
 <p>Worked pretty well adjusting the existing plots for year and category to location and year.<br>
 Code is also present in SALES_ANALYSIS.R file.</p>
 <div class="cell" data-hash="01_tidyverse_cache/html/plot_d1212a7bb51b78c9dad6ab5b230ae481">
@@ -465,8 +437,7 @@ Code is also present in SALES_ANALYSIS.R file.</p>
 </div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="01_tidyverse_files/figure-html/plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="01_tidyverse_files/figure-html/plot-1.png" class="img-fluid figure-img" width="1920"></a></p>
+<figure class="figure"><p><a href="01_tidyverse_files/figure-html/plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="01_tidyverse_files/figure-html/plot-1.png" class="img-fluid figure-img" width="1920"></a></p>
 </figure>
 </div>
 </div>
@@ -523,18 +494,14 @@ Code is also present in SALES_ANALYSIS.R file.</p>
 <span id="cb19-24"><a href="#cb19-24"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="01_tidyverse_files/figure-html/plot-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="01_tidyverse_files/figure-html/plot-2.png" class="img-fluid figure-img" width="1920"></a></p>
+<figure class="figure"><p><a href="01_tidyverse_files/figure-html/plot-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="01_tidyverse_files/figure-html/plot-2.png" class="img-fluid figure-img" width="1920"></a></p>
 </figure>
 </div>
 </div>
 </div>
 
 
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -783,8 +750,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":true,"openEffect":"zoom","selector":".lightbox"});</script>
-
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","selector":".lightbox","loop":true,"closeEffect":"zoom"});</script>
 
 
 </body></html>
